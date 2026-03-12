@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Agent2Go - AI Agent 雇佣平台",
-  description: "组建您的 AI 团队，释放无限可能。雇佣 CEO、Researcher、Coder 等专业 AI 角色，完成各类任务。",
+  title: "Agent2Go - AI 员工雇佣平台",
+  description: "组建您的 AI 员工团队，释放无限可能。雇佣 CEO、研究员、工程师等专业 AI 角色，完成各类任务。",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

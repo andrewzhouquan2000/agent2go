@@ -1,0 +1,99 @@
+import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
+import bcrypt from 'bcryptjs'
+import path from 'path'
+
+// Create LibSQL adapter for SQLite
+const dbPath = path.join(process.cwd(), 'prisma', 'dev.db')
+const adapter = new PrismaLibSql({
+  url: `file:${dbPath}`,
+})
+
+const prisma = new PrismaClient({ adapter })
+
+async function main() {
+  console.log('🌱 Seeding database...')
+
+  // Create demo user
+  const hashedPassword = await bcrypt.hash('demo1234', 10)
+  const user = await prisma.user.upsert({
+    where: { email: 'demo@example.com' },
+    update: {},
+    create: {
+      email: 'demo@example.com',
+      name: '演示用户',
+      passwordHash: hashedPassword,
+    },
+  })
+  console.log('✅ Created demo user:', user.email)
+
+  // Create AI employees (Agents)
+  const agents = [
+    {
+      name: 'ceo',
+      displayName: 'AI CEO',
+      description: '战略规划与决策专家，帮助您制定业务方向和增长策略',
+      capabilities: JSON.stringify(['战略规划', '业务分析', '团队管理', '决策支持']),
+      avatar: '/avatars/ceo.png',
+    },
+    {
+      name: 'researcher',
+      displayName: 'AI 研究员',
+      description: '市场研究与数据分析专家，提供深度行业洞察和竞品分析',
+      capabilities: JSON.stringify(['市场调研', '竞品分析', '数据收集', '报告撰写']),
+      avatar: '/avatars/researcher.png',
+    },
+    {
+      name: 'coder',
+      displayName: 'AI 工程师',
+      description: '全栈开发专家，快速构建网站、应用和自动化脚本',
+      capabilities: JSON.stringify(['网站开发', '应用开发', '代码审查', '自动化']),
+      avatar: '/avatars/coder.png',
+    },
+    {
+      name: 'designer',
+      displayName: 'AI 设计师',
+      description: 'UI/UX 设计专家，创建美观易用的产品界面和品牌视觉',
+      capabilities: JSON.stringify(['UI 设计', 'UX 优化', '品牌设计', '原型制作']),
+      avatar: '/avatars/designer.png',
+    },
+    {
+      name: 'writer',
+      displayName: 'AI 内容专家',
+      description: '内容创作专家，撰写高质量的文章、文案和营销材料',
+      capabilities: JSON.stringify(['文章写作', '文案创作', 'SEO 优化', '社交媒体']),
+      avatar: '/avatars/writer.png',
+    },
+    {
+      name: 'marketing',
+      displayName: 'AI 营销专家',
+      description: '数字营销专家，制定营销策略并执行推广活动',
+      capabilities: JSON.stringify(['营销策略', '社交媒体运营', '广告投放', '数据分析']),
+      avatar: '/avatars/marketing.png',
+    },
+  ]
+
+  for (const agentData of agents) {
+    const agent = await prisma.agent.upsert({
+      where: { name: agentData.name },
+      update: {},
+      create: agentData,
+    })
+    console.log('✅ Created AI employee:', agent.displayName)
+  }
+
+  console.log('🎉 Seeding completed!')
+  console.log('')
+  console.log('📝 Demo account:')
+  console.log('   Email: demo@example.com')
+  console.log('   Password: demo1234')
+}
+
+main()
+  .catch((e) => {
+    console.error('❌ Seeding failed:', e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })

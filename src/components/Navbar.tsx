@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
 
   const navLinks = [
     { href: "/", label: "首页" },
@@ -12,7 +15,6 @@ export default function Navbar() {
     { href: "/pricing", label: "价格" },
     { href: "/agents", label: "AI 员工" },
     { href: "/team", label: "我的团队" },
-    { href: "/dashboard", label: "仪表板" },
   ];
 
   return (
@@ -39,12 +41,30 @@ export default function Navbar() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
-          >
-            登录
-          </Link>
+          {status === 'loading' ? (
+            <div className="h-9 w-20 bg-muted animate-pulse rounded-md" />
+          ) : session?.user ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground mr-4"
+              >
+                {session.user.name || session.user.email}
+              </Link>
+              <Link href="/dashboard">
+                <Button variant="outline" size="sm">仪表板</Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" size="sm">登录</Button>
+              </Link>
+              <Link href="/login">
+                <Button size="sm">免费注册</Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
