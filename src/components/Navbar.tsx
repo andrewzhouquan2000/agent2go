@@ -8,9 +8,10 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "首页" },
-    { href: "/agents", label: "Agents" },
-    { href: "/team", label: "团队" },
-    { href: "/tasks", label: "任务" },
+    { href: "/templates", label: "场景模板" },
+    { href: "/pricing", label: "价格" },
+    { href: "/agents", label: "AI 员工" },
+    { href: "/team", label: "我的团队" },
     { href: "/dashboard", label: "仪表板" },
   ];
 
