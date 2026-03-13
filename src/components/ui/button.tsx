@@ -4,21 +4,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none",
+  "inline-flex items-center justify-center font-medium ring-offset-background transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none active:scale-95 hover:-translate-y-0.5",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg rounded-full",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md rounded-full",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md rounded-xl",
-        ghost: "hover:bg-accent hover:text-accent-foreground rounded-xl",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-xl rounded-full",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-lg rounded-full",
+        outline: "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-lg rounded-xl",
+        ghost: "hover:bg-accent hover:text-accent-foreground rounded-xl hover:shadow-md",
         link: "text-primary underline-offset-4 hover:underline rounded-xl",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md rounded-full",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md hover:shadow-xl rounded-full",
+        gradient: "bg-gradient-primary text-white shadow-lg hover:shadow-2xl rounded-full hover:scale-105",
       },
       size: {
         default: "h-11 rounded-full px-6 text-sm min-w-[88px]",
         sm: "h-9 rounded-full px-4 text-xs min-w-[72px]",
-        lg: "h-12 rounded-full px-8 text-base min-w-[120px]",
+        lg: "h-13 rounded-full px-10 text-base min-w-[140px] font-semibold",
         icon: "h-11 w-11 rounded-full",
       },
     },
