@@ -132,9 +132,17 @@ export default function AgentCreationWizard() {
             </div>
 
             <div className="flex justify-end">
-              <Button onClick={handleNext} disabled={!formData.description.trim()}>
+              <Button 
+                onClick={handleNext} 
+                disabled={!formData.description.trim() || formData.description.trim().length < 10}
+              >
                 下一步
               </Button>
+              {!formData.description.trim() && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  请描述您想要的 Agent 功能（至少 10 个字符）
+                </p>
+              )}
             </div>
           </div>
         )}

@@ -8,7 +8,10 @@ export async function GET() {
       orderBy: { name: 'asc' }
     })
 
-    return NextResponse.json({ agents })
+    // Add caching headers
+    const response = NextResponse.json({ agents });
+    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    return response;
   } catch (error) {
     console.error('Error fetching agents:', error)
     return NextResponse.json(
@@ -21,7 +24,26 @@ export async function GET() {
 // POST /api/agents - Create a new agent
 export async function POST(request: NextRequest) {
   try {
+    // Validate Content-Type
+    const contentType = request.headers.get('content-type');
+    if (!contentType?.includes('application/json')) {
+      return NextResponse.json(
+        { error: 'Content-Type 必须为 application/json' },
+        { status: 415 }
+      );
+    }
+
     const body = await request.json()
+    
+    // Validate payload size
+    const payloadSize = JSON.stringify(body).length;
+    if (payloadSize > 50000) { // 50KB limit for agent config
+      return NextResponse.json(
+        { error: '请求数据过大' },
+        { status: 413 }
+      );
+    }
+
     const { name, displayName, description, capabilities, avatar } = body
 
     // Validation
@@ -30,6 +52,28 @@ export async function POST(request: NextRequest) {
         { error: '名称和显示名称不能为空' },
         { status: 400 }
       )
+    }
+
+    // Validate field lengths
+    if (name.length > 100) {
+      return NextResponse.json(
+        { error: '名称长度不能超过 100 字符' },
+        { status: 400 }
+      );
+    }
+
+    if (displayName.length > 100) {
+      return NextResponse.json(
+        { error: '显示名称长度不能超过 100 字符' },
+        { status: 400 }
+      );
+    }
+
+    if (description && description.length > 1000) {
+      return NextResponse.json(
+        { error: '描述长度不能超过 1000 字符' },
+        { status: 400 }
+      );
     }
 
     const agent = await prisma.agent.create({
