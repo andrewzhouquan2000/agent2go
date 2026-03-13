@@ -9,47 +9,49 @@ export default function CustomerServiceButton() {
 
   return (
     <>
-      {/* Floating Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* Floating Button - Touch-friendly */}
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
         <Button
-          className="h-14 w-14 rounded-full shadow-lg text-lg"
+          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-lg text-lg flex-shrink-0"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label="联系客服"
         >
           💬
         </Button>
       </div>
 
-      {/* Popup Card */}
+      {/* Popup Card - Mobile Responsive */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 animate-in fade-in slide-in-from-bottom-4">
+        <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-80 max-w-sm animate-in fade-in slide-in-from-bottom-4">
           <Card className="shadow-xl">
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">
                 <div>
-                  <CardTitle className="text-lg">在线客服</CardTitle>
-                  <p className="text-sm text-muted-foreground">平均响应&lt;5 分钟</p>
+                  <CardTitle className="text-base sm:text-lg">在线客服</CardTitle>
+                  <p className="text-xs sm:text-sm text-muted-foreground">平均响应&lt;5 分钟</p>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground p-1"
+                  aria-label="关闭"
                 >
                   ✕
                 </button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2 sm:space-y-3">
               <div className="grid gap-2">
-                <Button variant="outline" className="w-full justify-start" asChild>
+                <Button variant="outline" className="w-full justify-start h-10 sm:h-11 text-sm" asChild>
                   <a href="https://wechat.com" target="_blank" rel="noopener noreferrer">
                     <span className="mr-2">💚</span> 微信咨询
                   </a>
                 </Button>
-                <Button variant="outline" className="w-full justify-start" asChild>
+                <Button variant="outline" className="w-full justify-start h-10 sm:h-11 text-sm" asChild>
                   <a href="tel:400-123-4567">
                     <span className="mr-2">📞</span> 电话咨询
                   </a>
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start h-10 sm:h-11 text-sm">
                   <span className="mr-2">✉️</span> 在线留言
                 </Button>
               </div>

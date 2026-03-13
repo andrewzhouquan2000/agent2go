@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业微信群聊 - Agent2Go Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #fff;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: #ededed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .nav-bar {
+            height: 44px;
+            background: #ededed;
+            border-bottom: 1px solid #dcdcdc;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: relative;
+        }
+        
+        .nav-back {
+            font-size: 16px;
+            color: #181818;
+        }
+        
+        .nav-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 17px;
+            font-weight: 600;
+            color: #181818;
+        }
+        
+        .nav-more {
+            margin-left: auto;
+            font-size: 20px;
+            color: #181818;
+        }
+        
+        .chat-container {
+            height: calc(812px - 44px - 44px - 44px - 50px);
+            overflow-y: auto;
+            padding: 16px;
+            background: #f5f5f5;
+        }
+        
+        .chat-header {
+            text-align: center;
+            padding: 12px 0;
+            background: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .chat-header-title {
+            font-size: 12px;
+            color: #181818;
+            font-weight: 500;
+        }
+        
+        .chat-header-members {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+        
+        .message {
+            display: flex;
+            margin-bottom: 16px;
+            align-items: flex-start;
+        }
+        
+        .message.self {
+            flex-direction: row-reverse;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .avatar.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .avatar.blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .avatar.orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .avatar.purple {
+            background: linear-gradient(135deg, #4facfe 0%, #43e97b 100%);
+        }
+        
+        .avatar.user {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .message-content {
+            max-width: 70%;
+            margin: 0 10px;
+        }
+        
+        .message-name {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        
+        .message-bubble {
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #181818;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .message.self .message-bubble {
+            background: #95ec69;
+        }
+        
+        .message-time {
+            font-size: 10px;
+            color: #ccc;
+            margin-top: 4px;
+            text-align: right;
+        }
+        
+        .input-area {
+            height: 50px;
+            background: #f7f7f7;
+            border-top: 1px solid #dcdcdc;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 12px;
+        }
+        
+        .input-voice {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #dcdcdc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .input-field {
+            flex: 1;
+            height: 36px;
+            background: #fff;
+            border-radius: 6px;
+            border: 1px solid #dcdcdc;
+            padding: 0 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            color: #888;
+        }
+        
+        .input-emoji {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #dcdcdc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .input-plus {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #dcdcdc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #181818;
+        }
+        
+        .agent-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        
+        .agent-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+        
+        .agent-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #181818;
+            margin-bottom: 8px;
+        }
+        
+        .agent-card-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #11998e;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>📶 🔋</span>
+        </div>
+        
+        <!-- Nav Bar -->
+        <div class="nav-bar">
+            <span class="nav-back">←</span>
+            <span class="nav-title">🛍️ 电商运营群</span>
+            <span class="nav-more">⋯</span>
+        </div>
+        
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <!-- Group Info -->
+            <div class="chat-header">
+                <div class="chat-header-title">🛍️ 电商运营群</div>
+                <div class="chat-header-members">群聊包含 6 人 · 3 个 Agent2Go 机器人</div>
+            </div>
+            
+            <!-- Message 1: User asks -->
+            <div class="message self">
+                <div class="avatar user">我</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        帮我写一个双十一促销的小红书文案，卖的是无线蓝牙耳机
+                    </div>
+                    <div class="message-time">09:35</div>
+                </div>
+            </div>
+            
+            <!-- Message 2: Agent responds -->
+            <div class="message">
+                <div class="avatar green">🤖</div>
+                <div class="message-content">
+                    <div class="message-name">
+                        小红书文案助手 <span class="agent-badge">Agent2Go</span>
+                    </div>
+                    <div class="message-bubble">
+                        好的！为您生成双十一促销文案：
+                        <br><br>
+                        🎧 <strong>双十一必入！这款蓝牙耳机真的绝了！</strong>
+                        <br><br>
+                        ✨ 音质绝绝子！低音沉高音亮，听歌看剧都超爽
+                        <br>
+                        ⚡ 续航 30 小时！充一次电用一周
+                        <br>
+                        💦 IPX7 防水！运动出汗也不怕
+                        <br>
+                        💰 双十一直降 200！只要¥299！
+                        <br><br>
+                        🛒 戳评论区链接，前 100 名再送收纳包！
+                        <br><br>
+                        #蓝牙耳机 #双十一购物 #数码好物 #学生党必备
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-card-title">📊 文案数据预测</div>
+                        <div class="agent-card-stats">
+                            <div class="stat-item">
+                                <span>预估曝光:</span>
+                                <span class="stat-value">5K-10K</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>互动率:</span>
+                                <span class="stat-value">3.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-time">09:35</div>
+                </div>
+            </div>
+            
+            <!-- Message 3: Another user -->
+            <div class="message">
+                <div class="avatar blue">小王</div>
+                <div class="message-content">
+                    <div class="message-name">小王</div>
+                    <div class="message-bubble">
+                        这个文案不错！我直接用了
+                    </div>
+                    <div class="message-time">09:36</div>
+                </div>
+            </div>
+            
+            <!-- Message 4: User asks another agent -->
+            <div class="message self">
+                <div class="avatar user">我</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        @客服小助手 有客户问"耳机续航多久"，怎么回复？
+                    </div>
+                    <div class="message-time">09:38</div>
+                </div>
+            </div>
+            
+            <!-- Message 5: Customer Service Agent -->
+            <div class="message">
+                <div class="avatar orange">🤖</div>
+                <div class="message-content">
+                    <div class="message-name">
+                        客服小助手 <span class="agent-badge">Agent2Go</span>
+                    </div>
+                    <div class="message-bubble">
+                        建议这样回复客户：
+                        <br><br>
+                        亲~ 这款耳机续航超强哦！💪
+                        <br><br>
+                        🎵 音乐播放：连续播放约 30 小时
+                        <br>
+                        📞 通话时间：约 25 小时
+                        <br>
+                        ⏸ 待机时间：约 180 天
+                        <br><br>
+                        充一次电可以用一周呢！而且支持快充，充电 10 分钟就能听歌 2 小时~
+                        <br><br>
+                        现在双十一活动价只要¥299，还包邮哦！💕
+                    </div>
+                    <div class="message-time">09:38</div>
+                </div>
+            </div>
+            
+            <!-- Message 6: User asks data agent -->
+            <div class="message self">
+                <div class="avatar user">我</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        @数据分析助手 昨天店铺流量怎么样？
+                    </div>
+                    <div class="message-time">09:40</div>
+                </div>
+            </div>
+            
+            <!-- Message 7: Data Agent -->
+            <div class="message">
+                <div class="avatar purple">🤖</div>
+                <div class="message-content">
+                    <div class="message-name">
+                        数据分析助手 <span class="agent-badge">Agent2Go</span>
+                    </div>
+                    <div class="message-bubble">
+                        📊 <strong>昨日店铺数据报告</strong>（11 月 10 日）
+                        <br><br>
+                        👁 总访客数：<strong>2,341</strong> <span style="color:#f5576c">↑18%</span>
+                        <br>
+                        🛒 下单转化率：<strong>4.2%</strong> <span style="color:#11998e">↑0.5%</span>
+                        <br>
+                        💰 GMV：<strong>¥28,450</strong> <span style="color:#11998e">↑25%</span>
+                        <br>
+                        📱 流量来源：
+                        <br>
+                        - 小红书：45% (主要增长来源)
+                        <br>
+                        - 淘宝搜索：30%
+                        <br>
+                        - 直通车：15%
+                        <br>
+                        - 其他：10%
+                        <br><br>
+                        💡 <strong>建议</strong>：小红书流量增长明显，建议加大内容投放！
+                    </div>
+                    <div class="message-time">09:40</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-voice">🎤</div>
+            <div class="input-field">输入消息...</div>
+            <div class="input-emoji">😊</div>
+            <div class="input-plus">➕</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -94,13 +94,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container py-8 flex items-center justify-center">
+      <main className="flex-1 container py-6 sm:py-8 flex items-center justify-center px-4">
         <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-center">
               {isRegisterMode ? '注册账户' : '欢迎回来'}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-center text-sm sm:text-base">
               {isRegisterMode 
                 ? '创建新账户，10 分钟创建您的第一个 AI 员工' 
                 : '使用微信或邮箱快速登录'}
@@ -114,9 +114,9 @@ export default function LoginPage() {
               </Alert>
             )}
 
-            {/* WeChat Login Button - Primary */}
+            {/* WeChat Login Button - Primary (Touch-friendly: min 44px height) */}
             <Button 
-              className="w-full bg-[#07C160] hover:bg-[#06AD56] text-white" 
+              className="w-full h-11 sm:h-12 bg-[#07C160] hover:bg-[#06AD56] text-white text-base" 
               onClick={handleWeChatLogin}
               disabled={isLoading}
             >
@@ -134,47 +134,55 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Email/Password Form */}
-            {isRegisterMode && (
+            {/* Email/Password Form - Vertical Layout for Mobile */}
+            <div className="space-y-4">
+              {isRegisterMode && (
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-sm">昵称</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="怎么称呼您"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    disabled={isLoading}
+                    className="h-11 text-base"
+                  />
+                </div>
+              )}
+
               <div className="space-y-2">
-                <Label htmlFor="name">昵称</Label>
+                <Label htmlFor="email" className="text-sm">邮箱</Label>
                 <Input
-                  id="name"
-                  type="text"
-                  placeholder="怎么称呼您"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   disabled={isLoading}
+                  className="h-11 text-base"
                 />
               </div>
-            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="email">邮箱</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="your@email.com"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                disabled={isLoading}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm">密码</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  inputMode="text"
+                  placeholder={isRegisterMode ? "至少 6 位" : "请输入密码"}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  disabled={isLoading}
+                  className="h-11 text-base"
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">密码</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder={isRegisterMode ? "至少 6 位" : "请输入密码"}
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                disabled={isLoading}
-              />
-            </div>
-
+            {/* Submit Button - Full Width, Touch-friendly */}
             <Button 
-              className="w-full" 
+              className="w-full h-11 sm:h-12 text-base" 
               onClick={handleSubmit}
               disabled={isLoading}
             >
@@ -183,13 +191,14 @@ export default function LoginPage() {
                 : (isRegisterMode ? '注册账户' : '邮箱登录')}
             </Button>
 
+            {/* Toggle Register/Login */}
             <p className="text-center text-sm text-muted-foreground">
               {isRegisterMode ? (
                 <>
                   已有账户？{' '}
                   <button 
                     type="button"
-                    className="text-primary hover:underline"
+                    className="text-primary hover:underline font-medium"
                     onClick={() => setIsRegisterMode(false)}
                   >
                     登录
@@ -200,7 +209,7 @@ export default function LoginPage() {
                   还没有账户？{' '}
                   <button 
                     type="button"
-                    className="text-primary hover:underline"
+                    className="text-primary hover:underline font-medium"
                     onClick={() => setIsRegisterMode(true)}
                   >
                     免费注册

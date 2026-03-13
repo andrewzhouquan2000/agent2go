@@ -58,16 +58,16 @@ export default function AgentsPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container py-8">
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-3xl font-bold">AI 员工团队</h1>
-            <p className="text-muted-foreground">
+      <main className="flex-1 container py-6 sm:py-8 px-3 sm:px-0">
+        <div className="space-y-6 sm:space-y-8">
+          <div className="px-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">AI 员工团队</h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               浏览可雇佣的专业 AI 员工，组建您的虚拟团队
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {agents.map((agent) => (
               <AgentCard
                 key={agent.id}

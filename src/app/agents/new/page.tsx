@@ -39,11 +39,11 @@ export default function NewAgentPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container py-8">
-        <div className="flex flex-col items-center space-y-8">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold">创建您的 AI 员工</h1>
-            <p className="text-muted-foreground">
+      <main className="flex-1 container py-6 sm:py-8 px-3 sm:px-0">
+        <div className="flex flex-col items-center space-y-6 sm:space-y-8">
+          <div className="text-center space-y-2 px-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">创建您的 AI 员工</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
               3 步，10 分钟完成 · 前 3 个 Agent 免费
             </p>
           </div>

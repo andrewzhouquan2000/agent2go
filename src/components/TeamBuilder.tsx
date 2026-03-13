@@ -36,44 +36,45 @@ export default function TeamBuilder({ availableAgents }: TeamBuilderProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>组建您的 AI 团队</CardTitle>
-        <CardDescription>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg sm:text-xl">组建您的 AI 团队</CardTitle>
+        <CardDescription className="text-sm sm:text-base">
           选择 AI Agent 并配置他们的角色
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-5 sm:space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="team-name">团队名称</Label>
+          <Label htmlFor="team-name" className="text-sm">团队名称</Label>
           <Input
             id="team-name"
             placeholder="例如：市场研究团队"
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
+            className="h-11 text-base"
           />
         </div>
 
-        <div className="space-y-4">
-          <Label>选择 Agent</Label>
-          <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-3 sm:space-y-4">
+          <Label className="text-sm">选择 Agent</Label>
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-2">
             {availableAgents.map((agent) => (
               <div
                 key={agent.id}
-                className={`flex items-center justify-between rounded-lg border p-4 cursor-pointer transition-colors ${
+                className={`flex items-center justify-between rounded-lg border p-3 sm:p-4 cursor-pointer transition-colors min-h-[60px] sm:min-h-[64px] ${
                   selectedAgents.includes(agent.id)
                     ? "border-primary bg-primary/5"
                     : "hover:bg-accent"
                 }`}
                 onClick={() => toggleAgent(agent.id)}
               >
-                <div>
-                  <p className="font-medium">{agent.displayName}</p>
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex-1 min-w-0 pr-2">
+                  <p className="font-medium text-sm sm:text-base truncate">{agent.displayName}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground truncate">
                     {agent.description}
                   </p>
                 </div>
                 <div
-                  className={`h-5 w-5 rounded border flex items-center justify-center ${
+                  className={`flex-shrink-0 h-5 w-5 rounded border flex items-center justify-center ${
                     selectedAgents.includes(agent.id)
                       ? "bg-primary border-primary"
                       : "border-input"
@@ -103,7 +104,7 @@ export default function TeamBuilder({ availableAgents }: TeamBuilderProps) {
         <Button
           onClick={handleCreateTeam}
           disabled={!teamName || selectedAgents.length === 0}
-          className="w-full"
+          className="w-full h-11 text-base"
         >
           创建团队 ({selectedAgents.length} 个 Agent)
         </Button>

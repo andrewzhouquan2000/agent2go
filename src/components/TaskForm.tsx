@@ -54,9 +54,9 @@ export default function TaskForm({ teamId, isSubmitting: externalSubmitting, onS
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>发布新任务</CardTitle>
-        <CardDescription>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg sm:text-xl">发布新任务</CardTitle>
+        <CardDescription className="text-sm sm:text-base">
           描述您的任务，AI 团队将为您执行
         </CardDescription>
       </CardHeader>
@@ -73,18 +73,19 @@ export default function TaskForm({ teamId, isSubmitting: externalSubmitting, onS
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="task-title">任务标题</Label>
+            <Label htmlFor="task-title" className="text-sm">任务标题</Label>
             <Input
               id="task-title"
               placeholder="例如：竞品分析报告"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className="h-11 text-base"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="task-description">任务描述</Label>
+            <Label htmlFor="task-description" className="text-sm">任务描述</Label>
             <Textarea
               id="task-description"
               placeholder="详细描述您的需求、期望结果和任何特殊要求..."
@@ -92,10 +93,15 @@ export default function TaskForm({ teamId, isSubmitting: externalSubmitting, onS
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
               required
+              className="text-base min-h-[120px]"
             />
           </div>
 
-          <Button type="submit" disabled={isSubmitting || !title || !description} className="w-full">
+          <Button 
+            type="submit" 
+            disabled={isSubmitting || !title || !description} 
+            className="w-full h-11 text-base"
+          >
             {isSubmitting ? "发布中..." : "发布任务"}
           </Button>
         </form>

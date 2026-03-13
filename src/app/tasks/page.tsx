@@ -118,17 +118,17 @@ export default function TasksPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container py-8">
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-3xl font-bold">任务管理</h1>
-            <p className="text-muted-foreground">
+      <main className="flex-1 container py-4 sm:py-8 px-3 sm:px-0">
+        <div className="space-y-4 sm:space-y-6 md:space-y-8">
+          <div className="px-2">
+            <h1 className="text-xl sm:text-3xl font-bold">任务管理</h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               发布任务并追踪 AI 员工执行进度
             </p>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-3">
-            {/* Task Form */}
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+            {/* Task Form - Full width on mobile */}
             <div className="lg:col-span-1">
               <TaskForm 
                 onSubmit={handleCreateTask}
@@ -138,9 +138,9 @@ export default function TasksPage() {
 
             {/* Task List */}
             <div className="lg:col-span-2 space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">所有任务</h2>
-                <Button variant="outline" size="sm" onClick={fetchTasks}>
+              <div className="flex justify-between items-center px-2">
+                <h2 className="text-lg sm:text-2xl font-bold">所有任务</h2>
+                <Button variant="outline" size="sm" className="h-9 text-sm" onClick={fetchTasks}>
                   🔄 刷新
                 </Button>
               </div>
@@ -160,7 +160,7 @@ export default function TasksPage() {
                 </div>
               ) : (
                 <Card>
-                  <CardContent className="py-8 text-center">
+                  <CardContent className="py-8 sm:py-12 text-center">
                     <p className="text-muted-foreground mb-4">暂无任务</p>
                     <p className="text-sm text-muted-foreground">
                       在左侧表单中填写任务信息，发布您的第一个任务

@@ -35,18 +35,18 @@ export default function TaskProgress({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-lg">{title}</CardTitle>
-          <CardDescription>
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2 gap-2">
+        <div className="space-y-1 min-w-0 flex-1">
+          <CardTitle className="text-base sm:text-lg truncate">{title}</CardTitle>
+          <CardDescription className="text-xs sm:text-sm truncate">
             {agentName ? `执行 Agent: ${agentName}` : "未分配 Agent"}
           </CardDescription>
         </div>
-        {getStatusBadge()}
+        <div className="flex-shrink-0">{getStatusBadge()}</div>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-xs sm:text-sm">
             <span>进度</span>
             <span>{progress}%</span>
           </div>
@@ -55,8 +55,8 @@ export default function TaskProgress({
 
         {logs && logs.length > 0 && (
           <div className="mt-4 space-y-2">
-            <p className="text-sm font-medium">执行日志:</p>
-            <div className="rounded-md bg-muted p-3 font-mono text-xs">
+            <p className="text-xs sm:text-sm font-medium">执行日志:</p>
+            <div className="rounded-md bg-muted p-2 sm:p-3 font-mono text-xs max-h-32 overflow-y-auto">
               {logs.slice(-5).map((log, index) => (
                 <div key={index} className="text-muted-foreground">
                   {log}
