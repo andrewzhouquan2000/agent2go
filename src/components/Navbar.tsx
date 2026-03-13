@@ -13,8 +13,6 @@ export default function Navbar() {
     { href: "/", label: "首页" },
     { href: "/templates", label: "场景模板" },
     { href: "/pricing", label: "价格" },
-    { href: "/agents", label: "AI 员工" },
-    { href: "/team", label: "我的团队" },
   ];
 
   return (
@@ -22,9 +20,9 @@ export default function Navbar() {
       <div className="container flex h-14 items-center">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">Agent2Go</span>
+            <span className="font-bold text-lg">Agent2Go</span>
           </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -46,10 +44,18 @@ export default function Navbar() {
           ) : session?.user ? (
             <>
               <Link
-                href="/dashboard"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground mr-4"
+                href="/agents/new"
+                className="hidden sm:inline-flex"
               >
-                {session.user.name || session.user.email}
+                <Button size="sm" className="gap-1">
+                  <span>➕</span> 创建 Agent
+                </Button>
+              </Link>
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground mr-2 sm:mr-4"
+              >
+                {session.user.name || session.user.email?.split('@')[0]}
               </Link>
               <Link href="/dashboard">
                 <Button variant="outline" size="sm">仪表板</Button>

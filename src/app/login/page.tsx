@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -20,6 +21,22 @@ export default function LoginPage() {
     password: '',
     name: '',
   })
+
+  const handleWeChatLogin = async () => {
+    setIsLoading(true)
+    setError('')
+    
+    try {
+      // In production, this would redirect to WeChat OAuth
+      // For now, simulate with a message
+      alert('微信登录功能开发中，请使用邮箱登录')
+      // await signIn('wechat', { callbackUrl: '/dashboard' })
+    } catch (err) {
+      setError('微信登录失败，请稍后重试')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -81,28 +98,50 @@ export default function LoginPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold">
-              {isRegisterMode ? '注册账户' : '登录'}
+              {isRegisterMode ? '注册账户' : '欢迎回来'}
             </CardTitle>
             <CardDescription>
               {isRegisterMode 
-                ? '创建新账户开始使用 AI 员工团队' 
-                : '使用邮箱登录您的账户'}
+                ? '创建新账户，10 分钟创建您的第一个 AI 员工' 
+                : '使用微信或邮箱快速登录'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Error Alert */}
             {error && (
-              <div className="p-3 text-sm text-red-600 bg-red-50 rounded">
-                {error}
-              </div>
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             )}
 
+            {/* WeChat Login Button - Primary */}
+            <Button 
+              className="w-full bg-[#07C160] hover:bg-[#06AD56] text-white" 
+              onClick={handleWeChatLogin}
+              disabled={isLoading}
+            >
+              <span className="mr-2">💚</span> 微信一键登录
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  或
+                </span>
+              </div>
+            </div>
+
+            {/* Email/Password Form */}
             {isRegisterMode && (
               <div className="space-y-2">
                 <Label htmlFor="name">昵称</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="您的昵称"
+                  placeholder="怎么称呼您"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   disabled={isLoading}
@@ -127,7 +166,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="至少 6 位"
+                placeholder={isRegisterMode ? "至少 6 位" : "请输入密码"}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 disabled={isLoading}
@@ -141,22 +180,7 @@ export default function LoginPage() {
             >
               {isLoading 
                 ? (isRegisterMode ? '注册中...' : '登录中...')
-                : (isRegisterMode ? '注册' : '登录')}
-            </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  或
-                </span>
-              </div>
-            </div>
-
-            <Button variant="outline" className="w-full" disabled>
-              使用 GitHub 登录（即将上线）
+                : (isRegisterMode ? '注册账户' : '邮箱登录')}
             </Button>
 
             <p className="text-center text-sm text-muted-foreground">
@@ -179,11 +203,18 @@ export default function LoginPage() {
                     className="text-primary hover:underline"
                     onClick={() => setIsRegisterMode(true)}
                   >
-                    注册
+                    免费注册
                   </button>
                 </>
               )}
             </p>
+
+            {/* Trust Indicators */}
+            <div className="pt-4 border-t space-y-2">
+              <p className="text-xs text-center text-muted-foreground">
+                🔒 安全加密 · 📱 手机可用 · ⚡ 1 分钟完成
+              </p>
+            </div>
           </CardContent>
         </Card>
       </main>
