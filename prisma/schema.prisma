@@ -105,3 +105,15 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Message {
+  id        String   @id @default(uuid())
+  roomId    String
+  userId    String
+  content   String
+  role      String   @default("user") // user, robot, system
+  createdAt DateTime @default(now())
+
+  @@index([roomId])
+  @@index([createdAt])
+}

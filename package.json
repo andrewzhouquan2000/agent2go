@@ -13,6 +13,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@lark-base-open/js-sdk": "^1.0.2",
     "@libsql/client": "^0.17.0",
     "@prisma/adapter-libsql": "^7.5.0",
     "@prisma/adapter-pg": "^7.5.0",
@@ -25,6 +26,7 @@
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "next-auth": "^4.24.13",
+    "node-fetch": "^3.3.2",
     "pg": "^8.20.0",
     "prisma": "^7.5.0",
     "react": "19.2.3",

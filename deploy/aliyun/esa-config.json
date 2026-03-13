@@ -1,0 +1,32 @@
+{
+  "siteName": "agent2go",
+  "description": "Agent2Go - AI Agent Platform",
+  "buildConfig": {
+    "framework": "nextjs",
+    "buildCommand": "npm run build",
+    "outputDirectory": ".next",
+    "nodeVersion": "20",
+    "installCommand": "npm install"
+  },
+  "environmentVariables": {
+    "DATABASE_URL": "file:./dev.db",
+    "NEXTAUTH_SECRET": "${NEXTAUTH_SECRET}",
+    "NEXTAUTH_URL": "${NEXTAUTH_URL}"
+  },
+  "routes": [
+    {
+      "path": "/api/*",
+      "rewrite": "/api/*"
+    },
+    {
+      "path": "/webchat/*",
+      "rewrite": "/webchat/*"
+    }
+  ],
+  "customDomain": {
+    "enabled": false,
+    "domain": ""
+  },
+  "branch": "main",
+  "autoDeploy": true
+}
