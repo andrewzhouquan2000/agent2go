@@ -52,44 +52,44 @@ export default function Home() {
         </section>
 
         {/* Social Proof - Use Cases */}
-        <section className="container py-8 sm:py-12 bg-muted/50 rounded-lg">
+        <section className="container py-8 sm:py-12">
           <div className="space-y-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-center px-4">同行都在用 Agent2Go</h2>
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-              <Card>
+            <h2 className="text-xl sm:text-2xl font-bold text-center">同行都在用 Agent2Go</h2>
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-4 sm:px-0">
+              <Card className="overflow-hidden">
                 <CardContent className="pt-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">🛍️</span>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center text-2xl">🛍️</div>
                       <h3 className="font-semibold">电商老板</h3>
                     </div>
-                    <p className="text-sm sm:text-base text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                       用 Agent2Go 自动回复客户咨询，每天省 3 小时
                     </p>
                   </div>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="overflow-hidden">
                 <CardContent className="pt-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">🍽️</span>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-2xl">🍽️</div>
                       <h3 className="font-semibold">餐饮老板</h3>
                     </div>
-                    <p className="text-sm sm:text-base text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                       用 Agent2Go 自动回复咨询，提升顾客满意度
                     </p>
                   </div>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="overflow-hidden">
                 <CardContent className="pt-6">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">📚</span>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-2xl">📚</div>
                       <h3 className="font-semibold">教培老板</h3>
                     </div>
-                    <p className="text-sm sm:text-base text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                       用 Agent2Go 管理学员，自动化运营更高效
                     </p>
                   </div>
@@ -102,32 +102,44 @@ export default function Home() {
         {/* Value Proposition Section */}
         <section className="container py-12 sm:py-16 md:py-24">
           <div className="space-y-6 sm:space-y-8">
-            <div className="text-center space-y-2 px-4">
+            <div className="text-center space-y-2">
               <h2 className="text-2xl sm:text-3xl font-bold">为什么选择 Agent2Go？</h2>
               <p className="text-sm sm:text-base text-muted-foreground">专为小老板设计，简单易用，快速见效</p>
             </div>
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-              <div className="rounded-lg border bg-card p-5 sm:p-6 shadow-sm space-y-3">
-                <div className="text-3xl">⚡</div>
-                <h3 className="text-lg sm:text-xl font-bold">10 分钟创建</h3>
-                <p className="text-sm sm:text-base text-muted-foreground">
-                  3 步简单流程，无需技术背景，10 分钟拥有您的第一个 AI 员工
-                </p>
-              </div>
-              <div className="rounded-lg border bg-card p-5 sm:p-6 shadow-sm space-y-3">
-                <div className="text-3xl">💰</div>
-                <h3 className="text-lg sm:text-xl font-bold">透明定价</h3>
-                <p className="text-sm sm:text-base text-muted-foreground">
-                  按 Agent 数量计费，¥0 起，无隐性支出，随时升级/降级
-                </p>
-              </div>
-              <div className="rounded-lg border bg-card p-5 sm:p-6 shadow-sm space-y-3">
-                <div className="text-3xl">💬</div>
-                <h3 className="text-lg sm:text-xl font-bold">5 分钟客服响应</h3>
-                <p className="text-sm sm:text-base text-muted-foreground">
-                  专业客服团队，工作时间 5 分钟内响应，紧急问题不等待
-                </p>
-              </div>
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-4 sm:px-0">
+              <Card className="overflow-hidden">
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center text-3xl">⚡</div>
+                    <h3 className="text-lg sm:text-xl font-bold">10 分钟创建</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      3 步简单流程，无需技术背景，10 分钟拥有您的第一个 AI 员工
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="overflow-hidden">
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center text-3xl">💰</div>
+                    <h3 className="text-lg sm:text-xl font-bold">透明定价</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      按 Agent 数量计费，¥0 起，无隐性支出，随时升级/降级
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="overflow-hidden">
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-3xl">💬</div>
+                    <h3 className="text-lg sm:text-xl font-bold">5 分钟客服响应</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      专业客服团队，工作时间 5 分钟内响应，紧急问题不等待
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>

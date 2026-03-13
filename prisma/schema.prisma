@@ -6,7 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -51,22 +52,22 @@ model TeamAgent {
   agentId   String
   team      Team   @relation(fields: [teamId], references: [id])
   agent     Agent  @relation(fields: [agentId], references: [id])
-  role      String // leader, member
+
+  @@unique([teamId, agentId])
 }
 
 model Task {
   id          String   @id @default(cuid())
   title       String
   description String
-  status      String   // pending, in_progress, completed, failed
+  status      String   @default("pending") // pending, in_progress, completed, failed
   userId      String
   user        User     @relation(fields: [userId], references: [id])
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id])
   teamId      String?
   team        Team?    @relation(fields: [teamId], references: [id])
-  agentId     String?
-  agent       Agent?   @relation(fields: [agentId], references: [id])
   result      String?
-  logs        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -77,15 +78,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
 }
@@ -95,7 +95,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 model VerificationToken {
@@ -104,16 +104,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model Message {
-  id        String   @id @default(uuid())
-  roomId    String
-  userId    String
-  content   String
-  role      String   @default("user") // user, robot, system
-  createdAt DateTime @default(now())
-
-  @@index([roomId])
-  @@index([createdAt])
 }
