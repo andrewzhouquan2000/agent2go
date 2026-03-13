@@ -4,22 +4,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-xl text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-md",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg rounded-full",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md rounded-full",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md rounded-xl",
+        ghost: "hover:bg-accent hover:text-accent-foreground rounded-xl",
+        link: "text-primary underline-offset-4 hover:underline rounded-xl",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md rounded-full",
       },
       size: {
-        default: "h-10 rounded-xl px-4 py-2",
-        sm: "h-9 rounded-xl px-3",
-        lg: "h-12 rounded-xl px-8 text-base",
-        icon: "h-10 w-10 rounded-xl",
+        default: "h-11 rounded-full px-6 text-sm min-w-[88px]",
+        sm: "h-9 rounded-full px-4 text-xs min-w-[72px]",
+        lg: "h-12 rounded-full px-8 text-base min-w-[120px]",
+        icon: "h-11 w-11 rounded-full",
       },
     },
     defaultVariants: {

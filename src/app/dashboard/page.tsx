@@ -113,32 +113,30 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container py-4 sm:py-8 px-3 sm:px-0">
-        <div className="space-y-6 sm:space-y-8">
+      <main className="flex-1 container py-12 px-4 sm:px-6">
+        <div className="space-y-8">
           {/* Header - Mobile First: Stacked Layout */}
           <div className="flex flex-col gap-4">
-            <div className="space-y-1">
+            <div className="space-y-2">
               <h1 className="text-2xl sm:text-3xl font-bold">早上好，{userName}！</h1>
-              <p className="text-sm sm:text-base text-muted-foreground">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 查看您的 AI 员工工作情况和业务数据
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs rounded-full">
                 {session?.user?.email}
               </Badge>
               <Button 
                 variant="outline" 
                 size="sm"
-                className="h-9 sm:h-10 text-sm"
                 onClick={() => router.push('/agents/new')}
               >
                 ➕ 创建 Agent
               </Button>
               <Button 
                 variant="outline" 
-                size="sm" 
-                className="h-9 sm:h-10 text-sm"
+                size="sm"
                 onClick={() => signOut({ callbackUrl: '/' })}
               >
                 退出
@@ -147,39 +145,39 @@ export default function DashboardPage() {
           </div>
 
           {/* Business Metrics - Card Layout for Mobile */}
-          <div className="space-y-3">
-            <h2 className="text-lg sm:text-xl font-semibold">本月概览</h2>
-            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">本月概览</h2>
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-xs sm:text-sm font-medium">对话次数</CardTitle>
-                  <span className="text-xl sm:text-2xl">💬</span>
+                  <CardTitle className="text-sm font-medium">对话次数</CardTitle>
+                  <span className="text-2xl">💬</span>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl sm:text-2xl font-bold">{metrics.conversations.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="text-2xl font-bold">{metrics.conversations.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground mt-1">
                     <span className="text-green-600 font-medium">↑{metrics.trend}%</span> 较上月
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-xs sm:text-sm font-medium">问题解决率</CardTitle>
-                  <span className="text-xl sm:text-2xl">✅</span>
+                  <CardTitle className="text-sm font-medium">问题解决率</CardTitle>
+                  <span className="text-2xl">✅</span>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl sm:text-2xl font-bold">{metrics.resolutionRate}%</div>
+                  <div className="text-2xl font-bold">{metrics.resolutionRate}%</div>
                   <Progress value={metrics.resolutionRate} className="mt-2 h-1" />
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-xs sm:text-sm font-medium">节省时间</CardTitle>
-                  <span className="text-xl sm:text-2xl">⏰</span>
+                  <CardTitle className="text-sm font-medium">节省时间</CardTitle>
+                  <span className="text-2xl">⏰</span>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl sm:text-2xl font-bold">{metrics.timeSaved} 小时</div>
-                  <p className="text-xs text-muted-foreground">
+                  <div className="text-2xl font-bold">{metrics.timeSaved} 小时</div>
+                  <p className="text-xs text-muted-foreground mt-1">
                     相当于 {Math.round(metrics.timeSaved / 8)} 个工作日
                   </p>
                 </CardContent>
@@ -188,48 +186,48 @@ export default function DashboardPage() {
           </div>
 
           {/* Quick Actions - Vertical Stack on Mobile */}
-          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <Card 
-              className="hover:shadow-md transition-shadow cursor-pointer"
+              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
               onClick={() => router.push('/agents/new')}
             >
               <CardHeader className="pb-3">
-                <CardTitle className="text-base sm:text-lg">➕ 创建新 Agent</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">3 步，10 分钟完成</CardDescription>
+                <CardTitle className="text-base">➕ 创建新 Agent</CardTitle>
+                <CardDescription className="text-sm">3 步，10 分钟完成</CardDescription>
               </CardHeader>
             </Card>
             <Card 
-              className="hover:shadow-md transition-shadow cursor-pointer"
+              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
               onClick={() => router.push('/templates')}
             >
               <CardHeader className="pb-3">
-                <CardTitle className="text-base sm:text-lg">📚 使用教程</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">快速上手指南</CardDescription>
+                <CardTitle className="text-base">📚 使用教程</CardTitle>
+                <CardDescription className="text-sm">快速上手指南</CardDescription>
               </CardHeader>
             </Card>
             <Card 
-              className="hover:shadow-md transition-shadow cursor-pointer"
+              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
               onClick={() => router.push('/pricing')}
             >
               <CardHeader className="pb-3">
-                <CardTitle className="text-base sm:text-lg">💎 升级专业版</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">解锁更多功能</CardDescription>
+                <CardTitle className="text-base">💎 升级专业版</CardTitle>
+                <CardDescription className="text-sm">解锁更多功能</CardDescription>
               </CardHeader>
             </Card>
           </div>
 
           {/* My Agents */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="flex justify-between items-center">
               <h2 className="text-xl sm:text-2xl font-bold">我的 Agent</h2>
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs rounded-full">
                 {agents.length}/{agentLimit} 免费
               </Badge>
             </div>
 
             {agents.length === 0 ? (
               <Card>
-                <CardContent className="py-8 sm:py-12 text-center space-y-3 sm:space-y-4">
+                <CardContent className="py-12 text-center space-y-4">
                   <div className="text-5xl sm:text-6xl">🤖</div>
                   <div className="space-y-2">
                     <p className="text-base sm:text-lg font-medium">还没有 Agent</p>
@@ -237,35 +235,35 @@ export default function DashboardPage() {
                       创建您的第一个 AI 员工，10 分钟即可完成
                     </p>
                   </div>
-                  <Button onClick={() => router.push('/agents/new')} className="h-10 sm:h-11">
+                  <Button onClick={() => router.push('/agents/new')} size="lg">
                     创建第一个 Agent
                   </Button>
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {agents.map((agent) => (
-                  <Card key={agent.id} className="hover:shadow-md transition-shadow">
+                  <Card key={agent.id} className="hover:shadow-lg transition-all hover:-translate-y-1">
                     <CardHeader className="pb-3">
                       <div className="flex justify-between items-start gap-2">
                         <div className="space-y-1 flex-1 min-w-0">
-                          <CardTitle className="text-base sm:text-lg truncate">{agent.displayName}</CardTitle>
-                          <CardDescription className="text-xs sm:text-sm truncate">{agent.description}</CardDescription>
+                          <CardTitle className="text-base font-semibold truncate">{agent.displayName}</CardTitle>
+                          <CardDescription className="text-xs truncate">{agent.description}</CardDescription>
                         </div>
-                        <Badge variant={agent.status === 'running' ? 'default' : 'secondary'} className="text-xs whitespace-nowrap">
+                        <Badge variant={agent.status === 'running' ? 'default' : 'secondary'} className="text-xs rounded-full whitespace-nowrap">
                           {agent.status === 'running' ? '● 运行中' : '○ 已暂停'}
                         </Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="text-xs sm:text-sm text-muted-foreground">
+                      <div className="text-sm text-muted-foreground">
                         今天 {agent.todayCount} 次对话
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="flex-1 h-9 text-xs sm:text-sm">
+                        <Button variant="outline" size="sm" className="flex-1">
                           查看数据
                         </Button>
-                        <Button variant="outline" size="sm" className="flex-1 h-9 text-xs sm:text-sm">
+                        <Button variant="outline" size="sm" className="flex-1">
                           调整配置
                         </Button>
                       </div>
@@ -276,13 +274,13 @@ export default function DashboardPage() {
                 {/* Add New Agent Card */}
                 {agents.length < agentLimit && (
                   <Card 
-                    className="hover:shadow-md transition-shadow cursor-pointer border-dashed"
+                    className="hover:shadow-lg transition-all cursor-pointer border-dashed hover:-translate-y-1"
                     onClick={() => router.push('/agents/new')}
                   >
-                    <CardContent className="py-8 sm:py-12 flex flex-col items-center justify-center text-center">
-                      <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">➕</div>
-                      <p className="text-sm sm:text-base font-medium">创建新 Agent</p>
-                      <p className="text-xs text-muted-foreground">
+                    <CardContent className="py-12 flex flex-col items-center justify-center text-center">
+                      <div className="text-3xl sm:text-4xl mb-4">➕</div>
+                      <p className="text-sm font-medium">创建新 Agent</p>
+                      <p className="text-xs text-muted-foreground mt-1">
                         剩余 {agentLimit - agents.length} 个免费名额
                       </p>
                     </CardContent>
@@ -294,17 +292,17 @@ export default function DashboardPage() {
 
           {/* Usage & Upgrade - Mobile Friendly */}
           <Card className="bg-gradient-to-r from-primary/5 to-primary/10">
-            <CardContent className="py-4 sm:py-6">
+            <CardContent className="py-6">
               <div className="flex flex-col gap-4">
-                <div className="space-y-1 sm:space-y-2">
-                  <p className="text-sm sm:text-base font-medium">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">
                     用量：{agents.length}/{agentLimit} Agent（免费）
                   </p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     剩余 {agentLimit - agents.length} 个免费名额
                   </p>
                 </div>
-                <Button asChild className="w-full sm:w-auto h-10 sm:h-11">
+                <Button asChild size="lg" className="w-full sm:w-auto">
                   <a href="/pricing">
                     升级到专业版 ¥99/月 →
                   </a>

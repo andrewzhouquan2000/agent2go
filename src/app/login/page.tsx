@@ -94,19 +94,19 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container py-6 sm:py-8 flex items-center justify-center px-4">
+      <main className="flex-1 container py-16 flex items-center justify-center px-4 sm:px-6">
         <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1 pb-4">
+          <CardHeader className="space-y-3 pb-4">
             <CardTitle className="text-xl sm:text-2xl font-bold text-center">
               {isRegisterMode ? '注册账户' : '欢迎回来'}
             </CardTitle>
-            <CardDescription className="text-center text-sm sm:text-base">
+            <CardDescription className="text-center text-sm">
               {isRegisterMode 
                 ? '创建新账户，10 分钟创建您的第一个 AI 员工' 
                 : '使用微信或邮箱快速登录'}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-5">
             {/* Error Alert */}
             {error && (
               <Alert variant="destructive">
@@ -116,7 +116,8 @@ export default function LoginPage() {
 
             {/* WeChat Login Button - Primary (Touch-friendly: min 44px height) */}
             <Button 
-              className="w-full h-11 sm:h-12 bg-[#07C160] hover:bg-[#06AD56] text-white text-base" 
+              size="lg"
+              className="w-full bg-[#07C160] hover:bg-[#06AD56] text-white" 
               onClick={handleWeChatLogin}
               disabled={isLoading}
             >
@@ -146,7 +147,6 @@ export default function LoginPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     disabled={isLoading}
-                    className="h-11 text-base"
                   />
                 </div>
               )}
@@ -161,7 +161,6 @@ export default function LoginPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   disabled={isLoading}
-                  className="h-11 text-base"
                 />
               </div>
 
@@ -175,14 +174,14 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   disabled={isLoading}
-                  className="h-11 text-base"
                 />
               </div>
             </div>
 
             {/* Submit Button - Full Width, Touch-friendly */}
             <Button 
-              className="w-full h-11 sm:h-12 text-base" 
+              size="lg"
+              className="w-full" 
               onClick={handleSubmit}
               disabled={isLoading}
             >
@@ -219,7 +218,7 @@ export default function LoginPage() {
             </p>
 
             {/* Trust Indicators */}
-            <div className="pt-4 border-t space-y-2">
+            <div className="pt-5 border-t space-y-2">
               <p className="text-xs text-center text-muted-foreground">
                 🔒 安全加密 · 📱 手机可用 · ⚡ 1 分钟完成
               </p>

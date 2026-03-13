@@ -26,23 +26,39 @@ export default function AgentCard({
       .slice(0, 2);
   };
 
+  // Generate a consistent gradient based on name
+  const getGradient = (name: string) => {
+    const gradients = [
+      "from-blue-100 to-blue-200",
+      "from-purple-100 to-purple-200",
+      "from-green-100 to-green-200",
+      "from-pink-100 to-pink-200",
+      "from-orange-100 to-orange-200",
+      "from-yellow-100 to-yellow-200",
+    ];
+    const index = name.length % gradients.length;
+    return gradients[index];
+  };
+
   return (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader className="flex flex-row items-center gap-3 sm:gap-4">
-        <Avatar className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0">
+    <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+      <CardHeader className="flex flex-row items-center gap-4">
+        <Avatar className="h-14 w-14 flex-shrink-0">
           <AvatarImage src={avatar} alt={displayName} />
-          <AvatarFallback className="text-sm sm:text-base">{getInitials(displayName)}</AvatarFallback>
+          <AvatarFallback className={`text-sm bg-gradient-to-br ${getGradient(name)}`}>
+            {getInitials(displayName)}
+          </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <CardTitle className="text-base sm:text-lg truncate">{displayName}</CardTitle>
-          <CardDescription className="capitalize text-xs sm:text-sm truncate">{name}</CardDescription>
+          <CardTitle className="text-base font-semibold truncate">{displayName}</CardTitle>
+          <CardDescription className="capitalize text-xs truncate">{name}</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 leading-relaxed">{description}</p>
-        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{description}</p>
+        <div className="flex flex-wrap gap-2">
           {capabilities.map((cap) => (
-            <Badge key={cap} variant="secondary" className="text-xs">
+            <Badge key={cap} variant="secondary" className="text-xs rounded-full">
               {cap}
             </Badge>
           ))}

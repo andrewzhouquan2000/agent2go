@@ -71,11 +71,11 @@ export default function PricingPage() {
       <Navbar />
       <main className="flex-1">
         {/* Hero Section - Mobile First */}
-        <section className="container py-8 sm:py-12 md:py-24 text-center px-4">
-          <h1 className="font-heading text-2xl sm:text-4xl md:text-6xl font-bold mb-3 sm:mb-4 leading-tight">
+        <section className="container py-16 sm:py-24 text-center px-4 sm:px-6">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
             透明定价，无隐性费用
           </h1>
-          <p className="text-base sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             选择适合您团队的方案，所有价格均包含 AI Token 费用
             <br className="hidden sm:block" />
             随时取消，无绑定
@@ -83,8 +83,8 @@ export default function PricingPage() {
         </section>
 
         {/* Pricing Plans - Mobile: Stack, Tablet+: Grid */}
-        <section className="container py-8 sm:py-12 px-3 sm:px-0">
-          <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 md:grid-cols-3">
+        <section className="container py-16 px-4 sm:px-6">
+          <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-3">
             {plans.map((plan) => (
               <Card
                 key={plan.name}
@@ -94,30 +94,31 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <span className="bg-primary text-primary-foreground text-xs sm:text-sm font-medium px-3 sm:px-4 py-1 rounded-full">
+                    <span className="bg-primary text-primary-foreground text-xs font-medium px-4 py-1 rounded-full">
                       最受欢迎
                     </span>
                   </div>
                 )}
                 <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-xl sm:text-2xl">{plan.name}</CardTitle>
-                  <CardDescription className="text-sm sm:text-base">{plan.description}</CardDescription>
+                  <CardTitle className="text-xl">{plan.name}</CardTitle>
+                  <CardDescription className="text-sm">{plan.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4 sm:space-y-6">
+                <CardContent className="space-y-6">
                   <div className="text-center">
-                    <span className="text-3xl sm:text-5xl font-bold">{plan.price}</span>
-                    <span className="text-muted-foreground text-sm sm:text-base">{plan.period}</span>
+                    <span className="text-3xl sm:text-4xl font-bold">{plan.price}</span>
+                    <span className="text-muted-foreground text-sm">{plan.period}</span>
                   </div>
-                  <ul className="space-y-2 sm:space-y-3">
+                  <ul className="space-y-3">
                     {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-xs sm:text-sm">{feature}</span>
+                      <li key={feature} className="flex items-start gap-3">
+                        <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <Button
-                    className="w-full h-10 sm:h-11 text-sm sm:text-base"
+                    className="w-full"
+                    size="lg"
                     variant={plan.popular ? "default" : "outline"}
                   >
                     {plan.cta}
@@ -129,22 +130,22 @@ export default function PricingPage() {
         </section>
 
         {/* Task-based Pricing - Mobile Friendly */}
-        <section className="container py-8 sm:py-12 md:py-24 px-3 sm:px-0">
-          <div className="text-center mb-8 sm:mb-12 px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">按任务付费</h2>
+        <section className="container py-16 sm:py-24 px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">按任务付费</h2>
             <p className="text-sm sm:text-base text-muted-foreground">
               超出额度后，按需购买任务，灵活付费
             </p>
           </div>
-          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {taskPricing.map((task) => (
               <Card key={task.name}>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base sm:text-lg">{task.name}</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm">{task.description}</CardDescription>
+                  <CardTitle className="text-base">{task.name}</CardTitle>
+                  <CardDescription className="text-sm">{task.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-baseline gap-1">
+                  <div className="flex items-baseline gap-2">
                     <span className="text-2xl sm:text-3xl font-bold">{task.price}</span>
                     <span className="text-muted-foreground text-sm">{task.unit}</span>
                   </div>
@@ -155,34 +156,34 @@ export default function PricingPage() {
         </section>
 
         {/* FAQ - Mobile Friendly */}
-        <section className="container py-8 sm:py-12 md:py-24 bg-muted rounded-lg px-4">
+        <section className="container py-16 sm:py-24 bg-muted rounded-2xl mx-4 sm:mx-0 px-6">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">常见问题</h2>
-            <div className="space-y-4 sm:space-y-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10">常见问题</h2>
+            <div className="space-y-6">
               <div>
-                <h3 className="font-bold text-sm sm:text-base mb-2">Q: 任务额度如何计算？</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <h3 className="font-semibold text-base mb-2">Q: 任务额度如何计算？</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   每个标准任务（如小红书笔记、公众号文章）消耗 1 个额度。
                   复杂任务（如独立站开发）消耗多个额度，具体在任务页面会明确显示。
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-sm sm:text-base mb-2">Q: AI Token 费用包含在价格中吗？</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <h3 className="font-semibold text-base mb-2">Q: AI Token 费用包含在价格中吗？</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   是的！所有价格都已包含 AI Token 费用，无需额外支付。
                   您只需关注任务结果，无需担心用量。
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-sm sm:text-base mb-2">Q: 可以随时取消订阅吗？</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <h3 className="font-semibold text-base mb-2">Q: 可以随时取消订阅吗？</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   可以！随时取消，无绑定。取消后当月仍可继续使用，
                   下月不再扣费。
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-sm sm:text-base mb-2">Q: 支持退款吗？</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <h3 className="font-semibold text-base mb-2">Q: 支持退款吗？</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   订阅费用支持 7 天无理由退款。按任务付费的项目，
                   如对结果不满意可申请重新生成或退款。
                 </p>
@@ -192,16 +193,16 @@ export default function PricingPage() {
         </section>
 
         {/* CTA - Mobile Friendly */}
-        <section className="container py-8 sm:py-12 md:py-24 text-center px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">准备好开始了吗？</h2>
-          <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
+        <section className="container py-16 sm:py-24 text-center px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">准备好开始了吗？</h2>
+          <p className="text-sm sm:text-base text-muted-foreground mb-8 max-w-2xl mx-auto">
             立即注册，享受首月¥399 体验价（原价¥699）
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Button size="lg" className="h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="w-full sm:w-auto">
               免费注册
             </Button>
-            <Button size="lg" variant="outline" className="h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
               联系销售
             </Button>
           </div>
