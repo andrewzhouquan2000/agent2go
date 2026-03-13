@@ -13,6 +13,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "首页" },
+    { href: "/scenarios", label: "AI 梦之队" },
     { href: "/templates", label: "场景模板" },
     { href: "/pricing", label: "价格" },
   ];

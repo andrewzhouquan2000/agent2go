@@ -81,6 +81,7 @@ export async function POST(request: NextRequest) {
         name,
         displayName,
         description: description || '',
+        category: 'custom',
         capabilities: JSON.stringify(capabilities || []),
         avatar: avatar || null,
       }

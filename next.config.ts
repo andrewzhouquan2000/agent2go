@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  // Enable standalone output for Docker deployment
+  output: 'standalone',
   // Force SSR for auth pages
   experimental: {
     serverActions: {

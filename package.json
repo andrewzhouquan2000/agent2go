@@ -46,5 +46,17 @@
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "sentry.client.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://codeup.aliyun.com/69b3838aba2d7df023da87e9/agent2go.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

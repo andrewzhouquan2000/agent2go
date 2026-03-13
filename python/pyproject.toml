@@ -1,0 +1,24 @@
+[project]
+name = "agent2go"
+version = "0.1.0"
+description = "Agent2Go - AI Agent Team Platform"
+requires-python = ">=3.13"
+dependencies = [
+    "crewai>=0.1.0",
+    "crewai-tools>=0.1.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
