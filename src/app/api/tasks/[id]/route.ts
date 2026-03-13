@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params
     const body = await request.json()
-    const { title, description, status, result, logs, agentId } = body
+    const { title, description, status, result, agentId } = body
 
     // Check if task exists
     const existingTask = await prisma.task.findUnique({
@@ -68,7 +68,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         description,
         status,
         result,
-        logs,
         agentId,
       },
       include: {
