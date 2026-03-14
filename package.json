@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:templates": "tsx prisma/seed-templates.ts",
     "postinstall": "prisma generate",
     "worker": "tsx worker/index.ts"
   },
