@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionProvider from "@/components/providers/SessionProvider";
 import CustomerServiceButton from "@/components/CustomerServiceButton";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import Sidebar from "@/components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <SessionProvider>
+            <Sidebar />
             {children}
             <CustomerServiceButton />
           </SessionProvider>
