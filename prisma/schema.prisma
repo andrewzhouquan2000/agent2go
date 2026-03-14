@@ -99,15 +99,15 @@ model Task {
   agentId      String?
   teamId       String?
   scenarioId   String?
-  workflowId   String?
-  input        String?
-  output       String?
-  parentId     String?
   result       String?
   crewaiFlowId String?
   metadata     String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+  input        String?
+  output       String?
+  parentId     String?
+  workflowId   String?
   scenario     Scenario? @relation(fields: [scenarioId], references: [id])
   team         Team?     @relation(fields: [teamId], references: [id])
   agent        Agent?    @relation(fields: [agentId], references: [id])
