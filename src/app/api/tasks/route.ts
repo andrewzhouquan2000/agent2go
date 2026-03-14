@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   try {
     const prisma = getPrisma()
     const body = await request.json()
-    const { title, description, userId, teamId, agentId } = body
+    const { title, description, userId, teamId, agentId, workflowId, input, output, parentId } = body
 
     // Validation
     if (!title || !userId) {
@@ -52,6 +52,10 @@ export async function POST(request: NextRequest) {
         userId,
         teamId: teamId || null,
         agentId: agentId || null,
+        workflowId: workflowId || null,
+        input: input || null,
+        output: output || null,
+        parentId: parentId || null,
       },
       include: {
         agent: true,
