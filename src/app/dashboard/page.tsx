@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import BottomNav from '@/components/dashboard/BottomNav'
 import StatsCards from '@/components/dashboard/StatsCards'
 import RecentTasks from '@/components/dashboard/RecentTasks'
+import UsageWidget from '@/components/dashboard/UsageWidget'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
@@ -142,6 +143,12 @@ export default function DashboardPage() {
             runningCount={stats.runningCount}
             remainingQuota={stats.remainingQuota}
           />
+
+          {/* Usage Widget */}
+          <UsageWidget />
+
+          {/* Recent Tasks */}
+          <RecentTasks limit={5} />
 
           {/* Quick Actions */}
           <div className="space-y-3">
