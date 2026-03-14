@@ -78,8 +78,8 @@ export default function DashboardPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
-        {/* Blue Gradient Navbar */}
-        <header className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-3 shadow-md">
+        {/* Blue Navbar - Solid #2563EB */}
+        <header className="bg-[#2563EB] text-white px-4 py-3 shadow-md">
           <div className="max-w-5xl mx-auto flex justify-between items-center">
             <h1 className="text-xl font-bold">Agent2Go</h1>
             <div className="w-8 h-8 bg-white/20 rounded-full"></div>
@@ -89,7 +89,7 @@ export default function DashboardPage() {
         {/* Loading Content */}
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2563EB] mx-auto"></div>
             <p className="text-gray-500">正在加载...</p>
           </div>
         </main>
@@ -108,8 +108,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pb-20">
-      {/* Blue Gradient Navbar */}
-      <header className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-3 shadow-md sticky top-0 z-10">
+      {/* Blue Navbar - Solid #2563EB */}
+      <header className="bg-[#2563EB] text-white px-4 py-3 shadow-md sticky top-0 z-10">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
           <div>
             <h1 className="text-xl font-bold">Agent2Go</h1>
