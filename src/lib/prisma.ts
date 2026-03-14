@@ -2,6 +2,9 @@
 // IMPORTANT: This is lazy-loaded to avoid build-time initialization errors
 
 import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
+import { createClient } from '@libsql/client'
+import path from 'path'
 
 const globalForPrisma = globalThis as unknown as {
   getPrisma: () => PrismaClient | undefined
@@ -12,7 +15,12 @@ let prismaInstance: PrismaClient | undefined
 
 function getOrCreatePrisma(): PrismaClient {
   if (!prismaInstance) {
+    const libsql = createClient({
+      url: process.env.DATABASE_URL || `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`,
+    })
+    const adapter = new PrismaLibSql(libsql)
     prismaInstance = new PrismaClient({
+      adapter,
       // Only log in development, not in production builds
       log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     })

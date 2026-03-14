@@ -1,43 +1,29 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Navbar from "@/components/Navbar"
-import Footer from "@/components/Footer"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import BottomNav from '@/components/dashboard/BottomNav'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
-interface Agent {
-  id: string
-  name: string
-  displayName: string
-  status: 'running' | 'paused' | 'error'
-  todayCount: number
-  description: string
-}
-
-interface BusinessMetrics {
-  conversations: number
-  resolutionRate: number
-  timeSaved: number
-  trend: number
+interface DashboardStats {
+  totalTasks: number
+  successCount: number
+  runningCount: number
+  remainingQuota: number
 }
 
 export default function DashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [agents, setAgents] = useState<Agent[]>([])
-  const [metrics, setMetrics] = useState<BusinessMetrics>({
-    conversations: 0,
-    resolutionRate: 0,
-    timeSaved: 0,
-    trend: 0,
+  const [stats, setStats] = useState<DashboardStats>({
+    totalTasks: 0,
+    successCount: 0,
+    runningCount: 0,
+    remainingQuota: 100,
   })
   const [isLoading, setIsLoading] = useState(true)
-  const [agentLimit] = useState(5) // Free tier limit
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -52,35 +38,24 @@ export default function DashboardPage() {
 
   const fetchDashboardData = async () => {
     try {
-      // TODO: Replace with actual API calls
-      // Simulated data for now
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      // Mock data
-      setAgents([
-        {
-          id: '1',
-          name: 'customer-service',
-          displayName: '客服小助手',
-          status: 'running',
-          todayCount: 23,
-          description: '自动回复客户咨询',
-        },
-        {
-          id: '2',
-          name: 'marketing',
-          displayName: '营销文案助手',
-          status: 'running',
-          todayCount: 5,
-          description: '生成营销文案',
-        },
-      ])
+      // Fetch tasks
+      const tasksRes = await fetch('/api/tasks')
+      const tasksData = await tasksRes.json()
+      const tasks = tasksData.tasks || []
 
-      setMetrics({
-        conversations: 1234,
-        resolutionRate: 89,
-        timeSaved: 12,
-        trend: 23,
+      // Calculate stats
+      const totalTasks = tasks.length
+      const successCount = tasks.filter((t: any) => t.status === 'completed').length
+      const runningCount = tasks.filter((t: any) => t.status === 'running' || t.status === 'pending').length
+
+      // TODO: Fetch actual usage from API
+      const remainingQuota = 100 - totalTasks
+
+      setStats({
+        totalTasks,
+        successCount,
+        runningCount,
+        remainingQuota: Math.max(0, remainingQuota),
       })
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error)
@@ -91,15 +66,25 @@ export default function DashboardPage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1 container py-8 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        {/* Blue Gradient Navbar */}
+        <header className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-3 shadow-md">
+          <div className="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 className="text-xl font-bold">Agent2Go</h1>
+            <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+          </div>
+        </header>
+
+        {/* Loading Content */}
+        <main className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-            <p className="text-muted-foreground">正在加载您的数据...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="text-gray-500">正在加载...</p>
           </div>
         </main>
-        <Footer />
+
+        {/* Bottom Navigation */}
+        <BottomNav />
       </div>
     )
   }
@@ -111,208 +96,102 @@ export default function DashboardPage() {
   const userName = session?.user?.name || session?.user?.email?.split('@')[0] || '用户'
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 container py-12 px-4 sm:px-6">
-        <div className="space-y-8">
-          {/* Header - Mobile First: Stacked Layout */}
-          <div className="flex flex-col gap-4">
-            <div className="space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-bold">早上好，{userName}！</h1>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                查看您的 AI 员工工作情况和业务数据
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="text-xs rounded-full">
-                {session?.user?.email}
-              </Badge>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => router.push('/agents/new')}
-              >
-                ➕ 创建 Agent
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => signOut({ callbackUrl: '/' })}
-              >
-                退出
-              </Button>
+    <div className="min-h-screen bg-gray-50 flex flex-col pb-20">
+      {/* Blue Gradient Navbar */}
+      <header className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-3 shadow-md sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-bold">Agent2Go</h1>
+            <p className="text-xs text-blue-100">AI 工作流编排平台</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="bg-white/20 text-white border-0">
+              {session?.user?.email?.split('@')[0]}
+            </Badge>
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">
+              {userName[0]?.toUpperCase() || 'U'}
             </div>
           </div>
+        </div>
+      </header>
 
-          {/* Business Metrics - Card Layout for Mobile */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">本月概览</h2>
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">对话次数</CardTitle>
-                  <span className="text-2xl">💬</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{metrics.conversations.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    <span className="text-green-600 font-medium">↑{metrics.trend}%</span> 较上月
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">问题解决率</CardTitle>
-                  <span className="text-2xl">✅</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{metrics.resolutionRate}%</div>
-                  <Progress value={metrics.resolutionRate} className="mt-2 h-1" />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">节省时间</CardTitle>
-                  <span className="text-2xl">⏰</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{metrics.timeSaved} 小时</div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    相当于 {Math.round(metrics.timeSaved / 8)} 个工作日
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+      {/* Main Content */}
+      <main className="flex-1 px-4 py-6">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* Welcome Section */}
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold text-gray-900">欢迎回来，{userName}</h2>
+            <p className="text-sm text-gray-500">查看您的 AI Agent 运行情况</p>
           </div>
 
-          {/* Quick Actions - Vertical Stack on Mobile */}
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <Card 
-              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
-              onClick={() => router.push('/agents/new')}
-            >
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">➕ 创建新 Agent</CardTitle>
-                <CardDescription className="text-sm">3 步，10 分钟完成</CardDescription>
+          {/* Stats Cards - 4 Metrics */}
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="border-l-4 border-l-blue-500">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">总任务数</CardTitle>
               </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-gray-900">{stats.totalTasks}</div>
+              </CardContent>
             </Card>
-            <Card 
-              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
-              onClick={() => router.push('/templates')}
-            >
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">📚 使用教程</CardTitle>
-                <CardDescription className="text-sm">快速上手指南</CardDescription>
+
+            <Card className="border-l-4 border-l-green-500">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">成功数</CardTitle>
               </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-green-600">{stats.successCount}</div>
+              </CardContent>
             </Card>
-            <Card 
-              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
-              onClick={() => router.push('/pricing')}
-            >
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">💎 升级专业版</CardTitle>
-                <CardDescription className="text-sm">解锁更多功能</CardDescription>
+
+            <Card className="border-l-4 border-l-orange-500">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">进行中</CardTitle>
               </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-orange-600">{stats.runningCount}</div>
+              </CardContent>
             </Card>
-          </div>
 
-          {/* My Agents */}
-          <div className="space-y-5">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl sm:text-2xl font-bold">我的 Agent</h2>
-              <Badge variant="outline" className="text-xs rounded-full">
-                {agents.length}/{agentLimit} 免费
-              </Badge>
-            </div>
-
-            {agents.length === 0 ? (
-              <Card>
-                <CardContent className="py-12 text-center space-y-4">
-                  <div className="text-5xl sm:text-6xl">🤖</div>
-                  <div className="space-y-2">
-                    <p className="text-base sm:text-lg font-medium">还没有 Agent</p>
-                    <p className="text-sm text-muted-foreground">
-                      创建您的第一个 AI 员工，10 分钟即可完成
-                    </p>
-                  </div>
-                  <Button onClick={() => router.push('/agents/new')} size="lg">
-                    创建第一个 Agent
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {agents.map((agent) => (
-                  <Card key={agent.id} className="hover:shadow-lg transition-all hover:-translate-y-1">
-                    <CardHeader className="pb-3">
-                      <div className="flex justify-between items-start gap-2">
-                        <div className="space-y-1 flex-1 min-w-0">
-                          <CardTitle className="text-base font-semibold truncate">{agent.displayName}</CardTitle>
-                          <CardDescription className="text-xs truncate">{agent.description}</CardDescription>
-                        </div>
-                        <Badge variant={agent.status === 'running' ? 'default' : 'secondary'} className="text-xs rounded-full whitespace-nowrap">
-                          {agent.status === 'running' ? '● 运行中' : '○ 已暂停'}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="text-sm text-muted-foreground">
-                        今天 {agent.todayCount} 次对话
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="flex-1">
-                          查看数据
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex-1">
-                          调整配置
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-
-                {/* Add New Agent Card */}
-                {agents.length < agentLimit && (
-                  <Card 
-                    className="hover:shadow-lg transition-all cursor-pointer border-dashed hover:-translate-y-1"
-                    onClick={() => router.push('/agents/new')}
-                  >
-                    <CardContent className="py-12 flex flex-col items-center justify-center text-center">
-                      <div className="text-3xl sm:text-4xl mb-4">➕</div>
-                      <p className="text-sm font-medium">创建新 Agent</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        剩余 {agentLimit - agents.length} 个免费名额
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Usage & Upgrade - Mobile Friendly */}
-          <Card className="bg-gradient-to-r from-primary/5 to-primary/10">
-            <CardContent className="py-6">
-              <div className="flex flex-col gap-4">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium">
-                    用量：{agents.length}/{agentLimit} Agent（免费）
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    剩余 {agentLimit - agents.length} 个免费名额
-                  </p>
+            <Card className="border-l-4 border-l-purple-500">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">剩余额度</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className={`text-3xl font-bold ${stats.remainingQuota < 20 ? 'text-red-600' : 'text-purple-600'}`}>
+                  {stats.remainingQuota}
                 </div>
-                <Button asChild size="lg" className="w-full sm:w-auto">
-                  <a href="/pricing">
-                    升级到专业版 ¥99/月 →
-                  </a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900">快速操作</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => router.push('/agents/new')}
+                className="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all text-left"
+              >
+                <div className="text-2xl mb-2">➕</div>
+                <div className="font-medium text-gray-900">创建 Agent</div>
+                <div className="text-xs text-gray-500 mt-1">3 步快速创建</div>
+              </button>
+              <button
+                onClick={() => router.push('/workflows')}
+                className="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all text-left"
+              >
+                <div className="text-2xl mb-2">🔗</div>
+                <div className="font-medium text-gray-900">工作流</div>
+                <div className="text-xs text-gray-500 mt-1">可视化编排</div>
+              </button>
+            </div>
+          </div>
         </div>
       </main>
-      <Footer />
+
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   )
 }
