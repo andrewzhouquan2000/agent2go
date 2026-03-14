@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import getPrisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
+    const prisma = getPrisma()
     const { sessionId } = await params;
     
     const messages = await prisma.message.findMany({
@@ -28,6 +29,7 @@ export async function POST(
   { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
+    const prisma = getPrisma()
     const { sessionId } = await params;
     const body = await request.json();
     const { senderType, senderName, senderRole, content, metadata } = body;

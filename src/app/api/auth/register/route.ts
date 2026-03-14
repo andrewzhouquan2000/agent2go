@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import prisma from '@/lib/prisma'
+import getPrisma from '@/lib/prisma'
 
 // Input sanitization helper
 function sanitizeInput(input: string): string {
@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user exists
+    const prisma = getPrisma()
     const existingUser = await prisma.user.findUnique({
       where: { email }
     })

@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
-import prisma from '@/lib/prisma'
+import getPrisma from '@/lib/prisma'
 
 export const authOptions: NextAuthOptions = {
   adapter: undefined, // We'll handle sessions manually with LibSQL
@@ -13,6 +13,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        const prisma = getPrisma()
         if (!credentials?.email || !credentials?.password) {
           throw new Error('邮箱和密码不能为空')
         }

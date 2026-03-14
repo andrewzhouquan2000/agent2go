@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import getPrisma from '@/lib/prisma'
 
 // GET /api/tasks - Get all tasks (optionally filtered by userId)
 export async function GET(request: NextRequest) {
   try {
+    const prisma = getPrisma()
     const searchParams = request.nextUrl.searchParams
     const userId = searchParams.get('userId')
 
@@ -31,6 +32,7 @@ export async function GET(request: NextRequest) {
 // POST /api/tasks - Create a new task
 export async function POST(request: NextRequest) {
   try {
+    const prisma = getPrisma()
     const body = await request.json()
     const { title, description, userId, teamId, agentId } = body
 

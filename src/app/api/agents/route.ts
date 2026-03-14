@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import getPrisma from '@/lib/prisma'
 
 // GET /api/agents - Get all agents
 export async function GET() {
   try {
+    const prisma = getPrisma()
     const agents = await prisma.agent.findMany({
       orderBy: { name: 'asc' }
     })
@@ -24,6 +25,7 @@ export async function GET() {
 // POST /api/agents - Create a new agent
 export async function POST(request: NextRequest) {
   try {
+    const prisma = getPrisma()
     // Validate Content-Type
     const contentType = request.headers.get('content-type');
     if (!contentType?.includes('application/json')) {

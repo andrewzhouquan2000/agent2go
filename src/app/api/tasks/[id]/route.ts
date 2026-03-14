@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import getPrisma from '@/lib/prisma'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -8,6 +8,7 @@ interface RouteParams {
 // GET /api/tasks/[id] - Get a single task
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const prisma = getPrisma()
     const { id } = await params
     
     const task = await prisma.task.findUnique({
@@ -45,6 +46,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // PUT /api/tasks/[id] - Update a task
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const prisma = getPrisma()
     const { id } = await params
     const body = await request.json()
     const { title, description, status, result, agentId } = body
@@ -89,6 +91,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 // DELETE /api/tasks/[id] - Delete a task
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const prisma = getPrisma()
     const { id } = await params
 
     // Check if task exists
