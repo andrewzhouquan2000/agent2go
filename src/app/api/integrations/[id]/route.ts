@@ -5,7 +5,7 @@ import { IntegrationType } from '@prisma/client'
 // GET /api/integrations/[id] - Get a single integration
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const prisma = getPrisma()
@@ -35,7 +35,7 @@ export async function GET(
 // PUT /api/integrations/[id] - Update an integration
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const prisma = getPrisma()
@@ -87,7 +87,7 @@ export async function PUT(
 // DELETE /api/integrations/[id] - Delete an integration
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const prisma = getPrisma()
