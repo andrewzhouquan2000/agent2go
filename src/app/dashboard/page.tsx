@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import BottomNav from '@/components/dashboard/BottomNav'
+import StatsCards from '@/components/dashboard/StatsCards'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
@@ -43,19 +44,28 @@ export default function DashboardPage() {
       const tasksData = await tasksRes.json()
       const tasks = tasksData.tasks || []
 
-      // Calculate stats
+      // Calculate stats from tasks
       const totalTasks = tasks.length
       const successCount = tasks.filter((t: any) => t.status === 'completed').length
       const runningCount = tasks.filter((t: any) => t.status === 'running' || t.status === 'pending').length
 
-      // TODO: Fetch actual usage from API
-      const remainingQuota = 100 - totalTasks
+      // Fetch usage from API
+      let remainingQuota = 100
+      try {
+        const usageRes = await fetch('/api/usage')
+        if (usageRes.ok) {
+          const usageData = await usageRes.json()
+          remainingQuota = usageData.usage?.remainingQuota ?? 100
+        }
+      } catch (usageError) {
+        console.warn('Failed to fetch usage, using default:', usageError)
+      }
 
       setStats({
         totalTasks,
         successCount,
         runningCount,
-        remainingQuota: Math.max(0, remainingQuota),
+        remainingQuota,
       })
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error)
@@ -125,45 +135,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Stats Cards - 4 Metrics */}
-          <div className="grid grid-cols-2 gap-4">
-            <Card className="border-l-4 border-l-blue-500">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">总任务数</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-gray-900">{stats.totalTasks}</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-l-4 border-l-green-500">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">成功数</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-green-600">{stats.successCount}</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-l-4 border-l-orange-500">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">进行中</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-orange-600">{stats.runningCount}</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-l-4 border-l-purple-500">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">剩余额度</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className={`text-3xl font-bold ${stats.remainingQuota < 20 ? 'text-red-600' : 'text-purple-600'}`}>
-                  {stats.remainingQuota}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <StatsCards
+            totalTasks={stats.totalTasks}
+            successCount={stats.successCount}
+            runningCount={stats.runningCount}
+            remainingQuota={stats.remainingQuota}
+          />
 
           {/* Quick Actions */}
           <div className="space-y-3">
