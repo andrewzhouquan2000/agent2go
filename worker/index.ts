@@ -6,6 +6,8 @@
  */
 
 import { getNextTask, storeTaskResult, getQueueLength, Task } from '../src/lib/queue'
+import { callAI } from '../src/lib/ai-client'
+import getPrisma from '../src/lib/prisma'
 
 // Worker configuration
 const POLL_INTERVAL_MS = parseInt(process.env.WORKER_POLL_INTERVAL || '5000', 10)
@@ -84,16 +86,111 @@ async function handleTestTask(task: Task): Promise<{ message: string }> {
   }
 }
 
-// Agent execution handler (placeholder)
+// Agent execution handler with AI integration
 async function handleAgentExecution(task: Task): Promise<unknown> {
   console.log('Agent execution task received:', task.payload)
   
-  // TODO: Implement actual agent execution logic
-  // This will integrate with CrewAI or other agent frameworks
+  const prisma = getPrisma()
+  
+  // Get task details from database if taskId is provided
+  let taskDetails = null
+  if (task.payload.taskId) {
+    taskDetails = await prisma.task.findUnique({
+      where: { id: task.payload.taskId as string },
+      include: {
+        agent: true,
+        user: true,
+      }
+    })
+    
+    if (!taskDetails) {
+      throw new Error(`Task not found: ${task.payload.taskId}`)
+    }
+    
+    // Update task status to processing
+    await prisma.task.update({
+      where: { id: taskDetails.id },
+      data: { status: 'processing' }
+    })
+  }
+  
+  // Build AI prompt
+  const systemPrompt = `You are an AI assistant helping to execute tasks for Agent2Go platform.
+Be helpful, concise, and professional.`
+  
+  const userPrompt = taskDetails
+    ? `Task: ${taskDetails.title}
+Description: ${taskDetails.description}
+Input: ${taskDetails.input || 'N/A'}
+
+Please execute this task and provide the output.`
+    : `Task payload: ${JSON.stringify(task.payload, null, 2)}
+
+Please process this task.`
+  
+  // Get AI configuration from environment
+  const aiProvider = process.env.AI_PROVIDER || 'openai'
+  const apiKey = process.env.OPENAI_API_KEY || process.env.CLAUDE_API_KEY || ''
+  const model = process.env.AI_MODEL || undefined
+  
+  if (!apiKey) {
+    throw new Error('AI API key not configured. Set OPENAI_API_KEY or CLAUDE_API_KEY')
+  }
+  
+  // Call AI
+  const response = await callAI(
+    [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt }
+    ],
+    {
+      provider: aiProvider as 'openai' | 'claude',
+      apiKey,
+      model,
+    }
+  )
+  
+  // Update task in database
+  if (taskDetails) {
+    await prisma.task.update({
+      where: { id: taskDetails.id },
+      data: {
+        status: 'completed',
+        output: response.content,
+        result: JSON.stringify({
+          success: true,
+          tokensUsed: response.usage?.totalTokens || 0,
+        }),
+      }
+    })
+    
+    // Track usage
+    await prisma.userUsage.upsert({
+      where: {
+        userId_date: {
+          userId: taskDetails.userId,
+          date: new Date(),
+        }
+      },
+      update: {
+        taskCount: { increment: 1 },
+        tokenCount: { increment: response.usage?.totalTokens || 0 },
+      },
+      create: {
+        userId: taskDetails.userId,
+        date: new Date(),
+        taskCount: 1,
+        tokenCount: response.usage?.totalTokens || 0,
+        costCents: 0, // TODO: Calculate based on provider pricing
+      }
+    })
+  }
   
   return {
-    status: 'placeholder',
-    note: 'Agent execution not yet implemented',
+    status: 'completed',
+    content: response.content,
+    tokensUsed: response.usage?.totalTokens || 0,
+    taskId: taskDetails?.id,
   }
 }
 
