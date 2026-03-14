@@ -46,7 +46,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, displayName, description, capabilities, avatar } = body
+    const { name, displayName, description, capabilities, avatar, templateId, config } = body
+
+    // Handle template-based creation
+    if (templateId) {
+      // Fetch template to get config
+      const template = await prisma.template.findUnique({
+        where: { id: templateId },
+      });
+
+      if (!template) {
+        return NextResponse.json(
+          { error: '模板不存在' },
+          { status: 404 }
+        );
+      }
+
+      const templateConfig = JSON.parse(template.config as string);
+      
+      const agent = await prisma.agent.create({
+        data: {
+          name: name.toLowerCase().replace(/\s+/g, '-'),
+          displayName: name,
+          description: template.description || '',
+          category: template.category,
+          capabilities: JSON.stringify(templateConfig.skills || []),
+          avatar: avatar || null,
+          goal: templateConfig.goal || null,
+          backstory: templateConfig.backstory || null,
+        }
+      });
+
+      return NextResponse.json({ agent }, { status: 201 });
+    }
 
     // Validation
     if (!name || !displayName) {
