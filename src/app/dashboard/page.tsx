@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import BottomNav from '@/components/dashboard/BottomNav'
 import StatsCards from '@/components/dashboard/StatsCards'
+import RecentTasks from '@/components/dashboard/RecentTasks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 

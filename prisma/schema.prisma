@@ -6,6 +6,14 @@ datasource db {
   provider = "sqlite"
 }
 
+enum TaskStatus {
+  pending
+  running
+  completed
+  failed
+  cancelled
+}
+
 model User {
   id            String        @id @default(cuid())
   email         String        @unique
@@ -91,10 +99,10 @@ model ScenarioAgent {
 }
 
 model Task {
-  id           String    @id @default(cuid())
+  id           String     @id @default(cuid())
   title        String
   description  String
-  status       String    @default("pending")
+  status       TaskStatus @default(pending)
   userId       String
   agentId      String?
   teamId       String?
@@ -102,16 +110,16 @@ model Task {
   result       String?
   crewaiFlowId String?
   metadata     String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  input        String?
-  output       String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  input        Json?
+  output       Json?
   parentId     String?
   workflowId   String?
-  scenario     Scenario? @relation(fields: [scenarioId], references: [id])
-  team         Team?     @relation(fields: [teamId], references: [id])
-  agent        Agent?    @relation(fields: [agentId], references: [id])
-  user         User      @relation(fields: [userId], references: [id])
+  scenario     Scenario?  @relation(fields: [scenarioId], references: [id])
+  team         Team?      @relation(fields: [teamId], references: [id])
+  agent        Agent?     @relation(fields: [agentId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
 }
 
 model Account {
@@ -220,15 +228,17 @@ model Template {
 }
 
 model UserUsage {
-  id         String   @id @default(cuid())
-  userId     String
-  date       DateTime
-  taskCount  Int      @default(0)
-  tokenCount Int      @default(0)
-  costCents  Int      @default(0)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id])
+  id          String   @id @default(cuid())
+  userId      String
+  date        DateTime
+  periodStart DateTime
+  periodEnd   DateTime
+  taskCount   Int      @default(0)
+  tokenCount  Int      @default(0)
+  costCents   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, date])
 }
