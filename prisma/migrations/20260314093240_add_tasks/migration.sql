@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Task" ADD COLUMN "input" TEXT;
+ALTER TABLE "Task" ADD COLUMN "output" TEXT;
+ALTER TABLE "Task" ADD COLUMN "parentId" TEXT;
+ALTER TABLE "Task" ADD COLUMN "workflowId" TEXT;

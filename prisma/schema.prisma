@@ -99,6 +99,10 @@ model Task {
   agentId      String?
   teamId       String?
   scenarioId   String?
+  workflowId   String?
+  input        String?
+  output       String?
+  parentId     String?
   result       String?
   crewaiFlowId String?
   metadata     String?
