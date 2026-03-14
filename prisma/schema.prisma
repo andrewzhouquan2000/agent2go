@@ -6,14 +6,6 @@ datasource db {
   provider = "sqlite"
 }
 
-enum TaskStatus {
-  pending
-  running
-  completed
-  failed
-  cancelled
-}
-
 model User {
   id            String        @id @default(cuid())
   email         String        @unique
@@ -116,10 +108,10 @@ model Task {
   output       Json?
   parentId     String?
   workflowId   String?
-  scenario     Scenario?  @relation(fields: [scenarioId], references: [id])
-  team         Team?      @relation(fields: [teamId], references: [id])
-  agent        Agent?     @relation(fields: [agentId], references: [id])
   user         User       @relation(fields: [userId], references: [id])
+  agent        Agent?     @relation(fields: [agentId], references: [id])
+  team         Team?      @relation(fields: [teamId], references: [id])
+  scenario     Scenario?  @relation(fields: [scenarioId], references: [id])
 }
 
 model Account {
@@ -206,16 +198,15 @@ model WorkflowTask {
 }
 
 model Integration {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  displayName String
+  id          String          @id @default(cuid())
   userId      String
-  credentials String?
-  status      String    @default("inactive")
-  lastSyncAt  DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  user        User      @relation(fields: [userId], references: [id])
+  type        IntegrationType
+  credentials Json?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Template {
@@ -269,4 +260,24 @@ model RateLimit {
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, endpoint, window])
+}
+
+enum TaskStatus {
+  pending
+  running
+  completed
+  failed
+  cancelled
+}
+
+enum IntegrationType {
+  OpenAI
+  Anthropic
+  Stripe
+  Shopify
+  Google
+  Microsoft
+  Slack
+  GitHub
+  Custom
 }
