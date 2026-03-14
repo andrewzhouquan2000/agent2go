@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent2Go - Workflow Builder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F3F4F6; }
+    
+    .navbar {
+      background: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .navbar-left { display: flex; align-items: center; }
+    .navbar .back { font-size: 24px; margin-right: 12px; cursor: pointer; }
+    .navbar h1 { color: #1F2937; font-size: 18px; font-weight: 600; }
+    .navbar .save { color: #2563EB; font-size: 14px; font-weight: 500; cursor: pointer; }
+    
+    .toolbar {
+      background: white;
+      padding: 12px 20px;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .add-node {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      background: #F3F4F6;
+      border-radius: 8px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .add-node span { margin-right: 8px; font-size: 18px; }
+    
+    .canvas {
+      padding: 40px 20px;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    
+    .node {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .node:hover {
+      border-color: #3B82F6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(59,130,246,0.15);
+    }
+    .node .node-header { display: flex; align-items: center; margin-bottom: 12px; }
+    .node .node-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-right: 12px;
+    }
+    .node .node-icon.data { background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%); }
+    .node .node-icon.agent { background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%); }
+    .node .node-icon.review { background: linear-gradient(135deg, #34D399 0%, #10B981 100%); }
+    .node .node-icon.publish { background: linear-gradient(135deg, #FB923C 0%, #F97316 100%); }
+    .node .node-title { color: #1F2937; font-size: 15px; font-weight: 600; }
+    .node .node-desc { color: #6B7280; font-size: 12px; margin-bottom: 8px; }
+    .node .node-detail { color: #9CA3AF; font-size: 11px; }
+    
+    .connector {
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(180deg, #3B82F6 0%, #93C5FD 100%);
+      position: relative;
+    }
+    .connector::after {
+      content: '↓';
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #3B82F6;
+      font-size: 14px;
+    }
+    
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #E5E7EB;
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+    }
+    .bottom-bar button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-run { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; }
+    .btn-edit { background: #F3F4F6; color: #374151; }
+    .btn-delete { background: #FEF2F2; color: #EF4444; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-left">
+      <span class="back">←</span>
+      <h1>Workflow Builder</h1>
+    </div>
+    <span class="save">💾 Save</span>
+  </div>
+  
+  <div class="toolbar">
+    <div class="add-node"><span>+</span> Add Node</div>
+  </div>
+  
+  <div class="canvas">
+    <div class="node">
+      <div class="node-header">
+        <div class="node-icon data">📁</div>
+        <div class="node-title">Data Source</div>
+      </div>
+      <div class="node-desc">Trigger - 数据源触发</div>
+      <div class="node-detail">CSV / Excel 文件导入</div>
+    </div>
+    
+    <div class="connector"></div>
+    
+    <div class="node">
+      <div class="node-header">
+        <div class="node-icon agent">🤖</div>
+        <div class="node-title">Content Agent</div>
+      </div>
+      <div class="node-desc">AI 内容生成</div>
+      <div class="node-detail">Model: GPT-4o</div>
+    </div>
+    
+    <div class="connector"></div>
+    
+    <div class="node">
+      <div class="node-header">
+        <div class="node-icon review">✅</div>
+        <div class="node-title">Review Agent</div>
+      </div>
+      <div class="node-desc">内容审核</div>
+      <div class="node-detail">Moderation API</div>
+    </div>
+    
+    <div class="connector"></div>
+    
+    <div class="node">
+      <div class="node-header">
+        <div class="node-icon publish">📤</div>
+        <div class="node-title">Publish Agent</div>
+      </div>
+      <div class="node-desc">发布到平台</div>
+      <div class="node-detail">Amazon / Shopify API</div>
+    </div>
+  </div>
+  
+  <div class="bottom-bar">
+    <button class="btn-run">▶ Run</button>
+    <button class="btn-edit">✏️ Edit</button>
+    <button class="btn-delete">🗑️ Delete</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent2Go - Create Agent</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F3F4F6; }
+    
+    .navbar {
+      background: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .navbar .back { font-size: 24px; margin-right: 12px; cursor: pointer; }
+    .navbar h1 { color: #1F2937; font-size: 18px; font-weight: 600; }
+    
+    .section-title {
+      padding: 20px 20px 12px;
+      color: #6B7280;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .template-list { padding: 0 16px; }
+    .template-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+    .template-card:hover {
+      border-color: #3B82F6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59,130,246,0.15);
+    }
+    .template-card .header { display: flex; align-items: center; margin-bottom: 12px; }
+    .template-card .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-right: 16px;
+    }
+    .template-card .icon.pink { background: linear-gradient(135deg, #F472B6 0%, #EC4899 100%); }
+    .template-card .icon.blue { background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%); }
+    .template-card .icon.purple { background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%); }
+    .template-card .icon.green { background: linear-gradient(135deg, #34D399 0%, #10B981 100%); }
+    .template-card .icon.orange { background: linear-gradient(135deg, #FB923C 0%, #F97316 100%); }
+    .template-card .info h3 { color: #1F2937; font-size: 16px; margin-bottom: 4px; }
+    .template-card .info p { color: #6B7280; font-size: 13px; }
+    
+    .bottom-button {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      background: white;
+      border-top: 1px solid #E5E7EB;
+    }
+    .bottom-button button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <span class="back">←</span>
+    <h1>Create Agent</h1>
+  </div>
+  
+  <div class="section-title">Select Template</div>
+  
+  <div class="template-list">
+    <div class="template-card">
+      <div class="header">
+        <div class="icon pink">📝</div>
+        <div class="info">
+          <h3>Content Creator</h3>
+          <p>Generate social content automatically</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="template-card">
+      <div class="header">
+        <div class="icon blue">🛒</div>
+        <div class="info">
+          <h3>Amazon Operator</h3>
+          <p>Automate Amazon operations</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="template-card">
+      <div class="header">
+        <div class="icon purple">📕</div>
+        <div class="info">
+          <h3>Xiaohongshu Marketing</h3>
+          <p>小红书营销专家</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="template-card">
+      <div class="header">
+        <div class="icon green">📊</div>
+        <div class="info">
+          <h3>Data Analyst</h3>
+          <p>Data analysis expert</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="template-card">
+      <div class="header">
+        <div class="icon orange">💬</div>
+        <div class="info">
+          <h3>Customer Support</h3>
+          <p>Customer service bot</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottom-button">
+    <button>Create Agent</button>
+  </div>
+  
+  <div style="height: 100px;"></div>
+</body>
+</html>
