@@ -75,7 +75,7 @@ async function executeTask(task: Task): Promise<unknown> {
 }
 
 // Test task handler
-async function handleTestTask(task: Task): Promise<{ message: string }> {
+async function handleTestTask(task: Task): Promise<{ message: string; processedAt: string }> {
   // Simulate work
   await sleep(1000)
   
@@ -107,10 +107,10 @@ async function handleAgentExecution(task: Task): Promise<unknown> {
       throw new Error(`Task not found: ${task.payload.taskId}`)
     }
     
-    // Update task status to processing
+    // Update task status to running
     await prisma.task.update({
       where: { id: taskDetails.id },
-      data: { status: 'processing' }
+      data: { status: 'running' }
     })
   }
   
@@ -179,6 +179,8 @@ Please process this task.`
       create: {
         userId: taskDetails.userId,
         date: new Date(),
+        periodStart: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+        periodEnd: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
         taskCount: 1,
         tokenCount: response.usage?.totalTokens || 0,
         costCents: 0, // TODO: Calculate based on provider pricing

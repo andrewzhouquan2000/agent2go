@@ -44,6 +44,8 @@ export async function trackTaskUsage(
     create: {
       userId,
       date: today,
+      periodStart: new Date(today.getFullYear(), today.getMonth(), 1),
+      periodEnd: new Date(today.getFullYear(), today.getMonth() + 1, 0),
       taskCount: 1,
       tokenCount,
       costCents,
