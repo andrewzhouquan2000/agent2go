@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+// This is your Prisma schema file for SQLite (local development)
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -7,6 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -26,14 +27,14 @@ model User {
 
 model Agent {
   id          String   @id @default(cuid())
-  name        String   @unique  // 专家名称，如 xiaohongshu-specialist
-  displayName String   // 显示名称，如 "小红书营销专家"
-  description String   // 专家描述
-  category    String   // 专家分类，如 "营销与增长"
-  capabilities String  // JSON string array，能力标签
-  avatar      String?  // 头像 URL
-  goal        String?  // CrewAI 角色目标
-  backstory   String?  // CrewAI 角色背景故事
+  name        String   @unique
+  displayName String
+  description String
+  category    String
+  capabilities String
+  avatar      String?
+  goal        String?
+  backstory   String?
   teams       TeamAgent[]
   tasks       Task[]
   scenarios   ScenarioAgent[]
@@ -63,13 +64,13 @@ model TeamAgent {
 
 model Scenario {
   id          String   @id @default(cuid())
-  name        String   @unique  // 场景名称，如 "小红书营销"
-  displayName String   // 显示名称
-  description String   // 场景描述
-  category    String   // 场景分类，如 "营销"
-  estimatedCost Int    // 预计成本（元）
-  estimatedDays Int    // 预计天数
-  kpi         String?  // 预期效果
+  name        String   @unique
+  displayName String
+  description String
+  category    String
+  estimatedCost Int
+  estimatedDays Int
+  kpi         String?
   agents      ScenarioAgent[]
   tasks       Task[]
   createdAt   DateTime @default(now())
@@ -80,7 +81,7 @@ model ScenarioAgent {
   id         String   @id @default(cuid())
   scenarioId String
   agentId    String
-  priority   Int      @default(1)  // 推荐优先级，1=核心，2=可选
+  priority   Int      @default(1)
   scenario   Scenario @relation(fields: [scenarioId], references: [id])
   agent      Agent    @relation(fields: [agentId], references: [id])
 
@@ -91,7 +92,7 @@ model Task {
   id          String   @id @default(cuid())
   title       String
   description String
-  status      String   @default("pending") // pending, in_progress, review, completed, failed
+  status      String   @default("pending")
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   agentId     String?
@@ -101,8 +102,8 @@ model Task {
   scenarioId  String?
   scenario    Scenario? @relation(fields: [scenarioId], references: [id])
   result      String?
-  crewaiFlowId String? // CrewAI Flow 执行 ID
-  metadata    String?  // JSON metadata
+  crewaiFlowId String?
+  metadata    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -141,29 +142,27 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Session 模型：任务会话（群聊上下文）
 model TaskSession {
   id          String   @id @default(cuid())
-  taskId      String   @unique  // 关联的 Task ID
-  scenarioId  String   // 场景 ID
-  status      String   @default("active") // active, completed, failed
-  crewaiLogs  String?  // JSON string，CrewAI 执行日志
-  result      String?  // 最终交付结果
-  messages    Message[] // 群聊消息
+  taskId      String   @unique
+  scenarioId  String
+  status      String   @default("active")
+  crewaiLogs  String?
+  result      String?
+  messages    Message[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-// Message 模型：群聊消息
 model Message {
   id          String     @id @default(cuid())
-  sessionId   String     // TaskSession ID
+  sessionId   String
   session     TaskSession @relation(fields: [sessionId], references: [id])
-  senderType  String     // "agent" | "user"
-  senderName  String     // 发送者名称
-  senderRole  String?    // 发送者角色（仅 agent）
-  content     String     // 消息内容
-  metadata    String?    // JSON metadata（如工具调用结果）
+  senderType  String
+  senderName  String
+  senderRole  String?
+  content     String
+  metadata    String?
   createdAt   DateTime   @default(now())
 
   @@index([sessionId])
