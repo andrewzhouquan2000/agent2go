@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model User {
@@ -20,6 +20,12 @@ model User {
   tasks         Task[]
   accounts      Account[]
   sessions      Session[]
+  workflows     Workflow[]
+  integrations  Integration[]
+  templates     Template[]
+  usageRecords  UserUsage[]
+  subscription  Subscription?
+  rateLimits    RateLimit[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -37,6 +43,7 @@ model Agent {
   teams       TeamAgent[]
   tasks       Task[]
   scenarios   ScenarioAgent[]
+  workflowTasks WorkflowTask[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -167,4 +174,103 @@ model Message {
   createdAt   DateTime   @default(now())
 
   @@index([sessionId])
+}
+
+// Workflow 模型：工作流定义
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  tasks       WorkflowTask[]
+  status      String   @default("draft") // draft, active, archived
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// WorkflowTask 模型：工作流中的任务节点
+model WorkflowTask {
+  id         String   @id @default(cuid())
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id])
+  agentId    String
+  agent      Agent    @relation(fields: [agentId], references: [id])
+  order      Int      @default(0)
+  config     String?  // JSON config
+  createdAt  DateTime @default(now())
+}
+
+// Integration 模型：第三方集成
+model Integration {
+  id          String   @id @default(cuid())
+  name        String   @unique // 如 "xiaohongshu", "douyin"
+  displayName String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  credentials String?  // 加密的凭证 JSON
+  status      String   @default("inactive") // active, inactive, error
+  lastSyncAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Template 模型：任务模板
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String   // 模板分类
+  content     String   // 模板内容 JSON
+  userId      String?  // null 表示系统模板
+  user        User?    @relation(fields: [userId], references: [id])
+  isSystem    Boolean  @default(false)
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// UserUsage 模型：用户使用量统计
+model UserUsage {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  date       DateTime
+  taskCount  Int      @default(0)
+  tokenCount Int      @default(0)
+  costCents  Int      @default(0) // 成本（分）
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, date])
+}
+
+// Subscription 模型：订阅计划
+model Subscription {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  plan           String   @default("free") // free, pro, enterprise
+  status         String   @default("active") // active, cancelled, expired
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// RateLimit 模型：API 限流
+model RateLimit {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  endpoint  String   // API 端点
+  window    String   // 时间窗口，如 "1h", "1d"
+  count     Int      @default(0)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, endpoint, window])
 }
